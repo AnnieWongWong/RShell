@@ -25,7 +25,8 @@ Our program will replicate the functionality of a shell in a C++ executable envi
 
 # Prototypes/Research
 * While creating the prototype function we found that we can combine the functions waitpid(), execvp(), and fork() together to efficiently run shell functions without having to define each shell function ourself. 
-*By itself, the fork function essentially creates a new process from the process that calls fork(). The new process is called the child process and the process that calls it is called the parent process. The child process continues to run the program starting from the line where fork is called. An important note is that the processes created by fork will run at the same time. Also fork() returns the process ID of the process that calls it.
+
+* By itself, the fork function essentially creates a new process from the process that calls fork(). The new process is called the child process and the process that calls it is called the parent process. The child process continues to run the program starting from the line where fork is called. An important note is that the processes created by fork will run at the same time. Also fork() returns the process ID of the process that calls it.
 
 * If waitpid() is called in a parent process, the parent process waits for the child process to finish. The first argument of waitpid determines what child process the parent process should wait for, the second argument stores the status of the process, and the third argument modified what waitpid does.
 
