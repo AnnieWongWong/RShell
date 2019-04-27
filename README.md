@@ -1,7 +1,8 @@
 # CS 100 RShell Programming Project
-Sprint 2019
+
 > Author(s): Annie Wong (862047406), Kevin Huo (862047406)
->Spring 2019
+
+Spring 2019
 
 # Introduction
 Our program will replicate the functionality of a shell in a C++ executable environment. The design pattern that is used is the composite design pattern, which allows us to  break our program down into several primitive and composite classes. This pattern makes it so that user/client only has to be aware of and interact with a single object, which means that the user can be completely oblivious of the subclasses or objects connected to the root object (the object the client interacts with). This program will essentially take in a string as input which will be the shell command. No matter how long the command is or how many commands (separated by connectors) are in the string, the program must be able to evaluate it. Our program will break the string up push it into a vector while also differentiating between the executable + argument list, and the  connectors. So, the vector will be made up of two classes, the Executable class which will hold the executables and argument lists of the command and the Connector class which will hold the connectors of the command (if they exist). The interface contains two virtual functions, run and get_line which will be distinctly defined in both the Connector and Executable class, by use of polymorphism. These functions will process the inputs based on their class's specifications and all in all make it possible for the program to complete it's goal successfully. In the end, the composite design pattern and polymorphism make it so that our program takes on a tree-like structure. 
