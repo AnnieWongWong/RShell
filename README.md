@@ -24,6 +24,21 @@ Our program will replicate the functionality of a shell in a C++ executable envi
 	The Command class is the composite object that will hold the primitive classes and call any run() function from the primitives. The Command class will have two private data types that will be used to properly execute the user input. Bool runned is a boolean data variable that will reflect if the current command ran successfully. This boolean data variable enables for user inputs with multiple commands to utilize the success of each command to the following commands. There is a vector that consists of Juat* in order to collect the user input in a linear fashion. Command will have four functions. Two are the virtual functions inherited from Juat and two additional functions that will assist in properly executing the user environment and instructions. Bool get_runned is a getter function that will provide access to and set the private boolean runned variable. The get_runned function will be called within the overloaded connector run() function as it holds necessary data for determining the connector logic. The start_Command_Prompt() function will provide the starting point in which the user will understand when it is appropriate to input data. Functionally the start_Command_Prompt() will print the $ symbol as a signal to the user. The get_Line() function will collect the user input and parse the necessary strings into the composite vector. The bool run() function will be overloaded to handle the two primitive types, as in, they will call the run() functions of the primitive classes.
 
 # Prototypes/Research
+*While creating the prototype function we found that we can combine the functions waitpid(), execvp(), and fork() together to efficiently run shell functions without having to define each shell function ourself. 
+*By itself, the fork function essentially creates a new process from the process that calls fork(). The new process is called the child process and the process that calls it is called the parent process. The child process continues to run the program starting from the line where fork is called. An important note is that the processes created by fork will run at the same time. Also fork() returns the process ID of the process that calls it.
+*If waitpid() is called in a parent process, the parent process waits for the child process to finish. The first argument of waitpid determines what child process the parent process should wait for, the second argument stores the status of the process, and the third argument modified what waitpid does.
+*And Execvp() essentially takes in the shell commands as an array of character and runs the command if it exists in a PATH environment. 
+
+*In a normal shell the logic of the connectors work just as assignment 2 describes. ("If a command is followed by ;, then the next command is always executed; if a command is followed by &&, then the next command is executed only if the first one succeeds; if a command is followed by ||, then the next command is executed only if the first one fails.") 
+
+*If "lss -a; ls" is typed in as a command then the shell will print out an error, but still continue to execute the second ls command.
+
+*If "lss -a && ls" is typed in as a command then the shell will print out an error and not execute the following command.
+*But if "ls -a && lss" is typed in as a command then the shell execute the first command and continue to execute the following command.
+
+*If "lss -a || ls" is typed in as a command then the shell will print out an error, but still continue to execute the second ls command.
+*But if If "ls -a || lss" is typed in as a command then the shell will successfully execute the first command and not try to execute the following command.
+
 
 # Development and Testing Roadmap
 
