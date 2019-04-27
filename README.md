@@ -80,3 +80,18 @@ The Command class is the composite object that will hold the primitive classes a
      * Perform Unit Test [ ]
      * Perform Integration Test [ ]
 * Final Testing and Revisions [ ]    
+
+# Issues 
+* [Final Testing and Revisions](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/31)
+* [Perform Integration test for Connector get_Line](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/30)
+* [Perform Unit Test For Connector get_Line](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/29)
+* [Write Connector string get_Line](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/28)
+* [Perform Integration test for Command bool run](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/27)
+* [Perform Unit test for Command bool run](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/26)
+* [Write Command bool run](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/25)
+* [Perform Integration test for get_Runned](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/24)
+* [Perform Unit test for get_Runned](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/23)
+* [Write bool get_Runned](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/22)
+
+
+
