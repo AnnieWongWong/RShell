@@ -41,6 +41,7 @@ int main(){
 	} 
 	else {
 		args[1] = (char*)argList.c_str();
+		args[2] = NULL;
 	}
 	
 
