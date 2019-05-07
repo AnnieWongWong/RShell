@@ -7,11 +7,7 @@ class Juat{
 	public:
 		Juat(){}
 		virtual bool run(string arg_list) = 0;
-
-		
-
-
-
+		virtual string get_Line(string input) = 0;
 
 
 };
