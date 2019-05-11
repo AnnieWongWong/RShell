@@ -5,12 +5,14 @@
 
 class Connector: public Juat{
 	private:
-		ConnectStrat* s; 
+ 		string connex;
+		Command* comma;
 
 	public:
-		string get_Line(string input);
-		void bool run(string connector);
-
+		Connector(){	};
+		Connector(string c){connex = c};
+		virtual string get_Line() = 0;	
+		virtual bool run() = 0;
 }
 	
 
