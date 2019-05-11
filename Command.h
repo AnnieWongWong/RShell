@@ -30,10 +30,9 @@ protected:
 
 public:
    void start_Command_prompt(){cout << "$ ";}
-   bool getRunner(){return eqex;}
+   bool getEqex(){return eqex;}
    void run();
-   string get_Line(string stone);
-
+   string get_Line();
 
 };
 #endif
