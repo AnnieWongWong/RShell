@@ -10,6 +10,7 @@ TEST(Connectors, Semi1) {
    bool runns = true;
    SemiColon* semi = new SemiColon();
    EXPECT_EQ(semi->run(runns),true);
+   EXPECT_EQ(semi->getCrets(),";");
 }
 
 TEST(Connectors, Semi2) {
@@ -22,6 +23,7 @@ TEST(Connectors, And1) {
    bool runns = true;
    AndStrat* and1 = new AndStrat();
    EXPECT_EQ(and1->run(runns),true);
+   EXPECT_EQ(and1->getChamb(),"&&");
 }
 
 TEST(Connectors, And2) {
@@ -34,6 +36,7 @@ TEST(Connectors, Or1) {
    bool runns = false;
    OrStrat* or2 = new OrStrat();
    EXPECT_EQ(or2->run(runns),true);
+   EXPECT_EQ(or2->getErOfSe(),"||");
 }
 
 int main(int argc, char **argv) {

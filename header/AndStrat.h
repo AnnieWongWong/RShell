@@ -11,5 +11,6 @@ virtual bool run(bool runned){
 if(runned == true) return true;
 else return false;
 }
+string getChamb(){return connex;}
 };
 #endif

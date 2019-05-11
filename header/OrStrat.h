@@ -10,5 +10,6 @@ virtual bool run(bool runned){
 if(runned == false) return true;
 else return false;
 }
+string getErOfSe(){return connex;}
 };
 #endif

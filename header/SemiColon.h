@@ -9,6 +9,8 @@ public:
 SemiColon();
 
 bool run(bool runned);
+
+string getCrets(){return connex;}
 };
 
 #endif
