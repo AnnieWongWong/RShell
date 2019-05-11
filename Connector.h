@@ -11,7 +11,7 @@ class Connector: public Juat{
 		string get_Line(string input);
 		void bool run(string connector);
 
-}
+};
 	
 
 #endif
