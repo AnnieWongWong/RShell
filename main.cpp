@@ -17,10 +17,10 @@ using namespace std;
 
 int main() {
 
-Command start;
+Command* start = new Command;
 bool weRun = true;
 while(weRun){
-weRun = start.run();
+weRun = start->run();
 }
-return 0;s
+return 0;
 }

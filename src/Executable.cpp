@@ -47,4 +47,10 @@ bool Executable::run(){
 
 }
 
+string Executable::checkExit(){
+  string ex = exec.at(0);
+  return ex;
+
+}
+
 

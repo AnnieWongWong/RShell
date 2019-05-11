@@ -2,6 +2,6 @@
 
 SemiColon::SemiColon(){connex = ";";}
 
-bool SemiColon::run(bool runned){
+bool SemiColon::run2(bool runned){
 	return true;
 }

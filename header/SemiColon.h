@@ -6,11 +6,11 @@
 class SemiColon : public Connector{
 public:
 
-SemiColon(){}
+SemiColon();
+virtual bool run1(){ return true;}
+bool run2(bool runned);
 
-bool run(bool runned);
-
-string getCrets(){return connex;}
+string getConnex(){return connex;}
 };
 
 #endif

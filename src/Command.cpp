@@ -13,20 +13,6 @@
 
 using namespace std;
 
-void printInorder(struct Node* node) 
-{ 
-    if (node == NULL) 
-        return; 
-  
-    /* first recur on left child */
-    printInorder(node->left); 
-  
-    /* then print the data of node */
-    node->getJuat()->run(); 
-  
-    /* now recur on right child */
-    printInorder(node->right); 
-} 
 
 
 Command::Command(){
@@ -43,6 +29,7 @@ bool Command::getEqex(){
 }
 
 bool Command::run(){
+  bool timeToExit = true;
   vector< vector<string> > commandList;
   vector<string> unfilteredCommand;
 	string userCommand;
@@ -151,11 +138,11 @@ bool Command::run(){
     }
     
     bool isConnector = false;
+    bool lastNodE = true;
     bool firstNode = true;
-    Node* root;
-    Node* last;
+    bool firstConnector = true;
     
-    for (int i = 0; i < commandList.size(); i++){
+   for (int i = 0; i < commandList.size(); i++){
         Juat* newJuat;
         for(int j = 0; j < commandList.at(i).size(); j++){
             if (commandList.at(i).at(j) == ";"){
@@ -177,22 +164,77 @@ bool Command::run(){
             if (firstNode){
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
                 firstNode = false;
+                power = current;
                 root = current;
             }
+            else if (isConnector && firstConnector){
+                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                root = current;
+                current->setLeft(power);
+                power = current;
+                firstConnector = false;
+                lastNodE = false;
+            }
             else if (isConnector){
-                Node* current = root;
-                Node* next = new Node(current, NULL, NULL, newJuat, true);
-				current->setParent(next);
-                root = next;
+                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                current->setRight(root->right);
+                current->setLeft(root);
+                current->right->setRight(NULL);
+                root = current;
+                lastNodE = false;
             }
             else {
-                Node* current = root;
-                Node* next = new Node(NULL, NULL, current, newJuat, true);
-                current->setright(next);
+                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                current->setRight(root);
+                root = current;
+                lastNodE = false;
             }
             
         }
     }
-    printInorder(root);
-	return true;
+    
+    if(lastNodE){
+        Juat* newJuat = new SemiColon;
+        Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                current->setRight(root->right);
+                current->setLeft(root);
+                current->left->setRight(NULL);
+                root = current;
+    }
+    
+    Node* trav = this->power;
+    bool execRanned = false;
+    while(trav!=NULL){
+            if(trav->left->j->getConnex() == "exit"){
+              timeToExit = false;
+              trav == NULL;
+            }
+            trav->left->evaluate1();
+            execRanned = trav->left->getHohenheim();
+            trav->evaluate2(execRanned);
+            if(trav->j->getConnex() == ";")trav = trav->getParent();
+            else if(trav->j->getConnex() == "&&"){
+              if(trav->getHohenheim()) trav = trav->getParent();
+              else{
+                while(trav->j->getConnex() == "&&" || trav!= NULL){
+                    trav = trav->getParent();                
+                }
+              }
+            }
+            else if(trav->j->getConnex() == "||"){
+              if(!trav->getHohenheim())trav = trav->getParent();
+              else{
+                while(trav->j->getConnex() == "||" || trav!= NULL){
+                    trav = trav->getParent();                
+                }
+              }
+            }
+    
+    }
+	return timeToExit;
 }
+
+
+    
+
+

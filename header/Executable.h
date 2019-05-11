@@ -4,9 +4,6 @@
 #include <vector>
 using namespace std;
 
-#include <vector>
-using namespace std;
-
 class Executable: public Juat{
     private:
         vector<string> exec;
@@ -15,6 +12,8 @@ class Executable: public Juat{
         Executable(){}
         Executable(vector<string> executable){exec = executable;}
         bool run();
+        bool run2(bool prev){return false;}
+        string getConnex();
 };
 
 #endif 

@@ -6,8 +6,8 @@ class AndStrat : public Connector{
 public:
 
 AndStrat(){connex = "&&";}
-
-virtual bool run(bool runned){
+virtual bool run1(){ return true;}
+virtual bool run2(bool runned){
 	if(runned == true) 
 		return true;
 	else {
@@ -15,7 +15,7 @@ virtual bool run(bool runned){
 	}
 }	
 
-string getChamb(){return connex;}
+string getConnex(){return connex;}
 
 };
 #endif

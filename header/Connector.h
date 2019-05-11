@@ -12,7 +12,8 @@ class Connector: public Juat{
 	public:
 		Connector(){	}
 		Connector(string c){connex = c;};
-		virtual bool run(){return true;};
+    virtual bool run(){return true;};
+		virtual bool run2(){return true;};
 };
 
 	

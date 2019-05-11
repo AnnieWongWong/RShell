@@ -21,8 +21,11 @@ public:
    void setleft(Node* exec){left = exec;}
    void setright(Node* connex){right = connex;}
    Juat* getJuat(){return j;}
-   void evaluate(){
+   void evaluate1(){
    	hohen = j->run();
+   }
+   void evaluate2(bool prevRan){
+   	hohen = j->run2(prevRan);
    }
    bool getHohenheim(){return hohen;}
 };
@@ -38,6 +41,8 @@ public:
    void start_Command_prompt();
    bool getEqex();
    bool run();
+   bool run2(bool prev){return false;};
+   string getConnex(){return 0;}
 
 };
 #endif
