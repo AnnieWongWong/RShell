@@ -5,12 +5,17 @@
 class AndStrat : public Connector{
 public:
 
-AndStrat(){connex = "&&";};
+AndStrat(){connex = "&&";}
 
 virtual bool run(bool runned){
-if(runned == true) return true;
-else return false;
-}
+	if(runned == true) 
+		return true;
+	else {
+	 return false;
+	}
+}	
+
 string getChamb(){return connex;}
+
 };
 #endif

@@ -17,8 +17,5 @@ class Executable: public Juat{
         bool run();
 };
 
-<<<<<<< HEAD
-#endif
-=======
-#endif _EXECUTABLE_H_
->>>>>>> AW
+#endif 
+

@@ -1,23 +1,28 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 #include "Juat.h"
-#include <iostream>
+
 class Node{
 friend class Command;
 protected:
-   Node* left;
-   Node* right;
    Node* parent;
    Juat* j;
    bool hohen;
 
 public:
+   Node* left;
+   Node* right;
    Node(){left = 0; right  = 0; parent = 0; j = 0; hohen = false;}
    Node(Node* l, Node* r, Node* p, Juat* jay, bool heim){left = l; right = r; parent = p; j = jay; hohen = heim;}
    void setLeft(Node* exec){left = exec; exec->parent = this;}
    void setRight(Node* connex){right = connex; connex->parent = this;}
+   void setParent(Node* p){ parent = p;}
+   Node* getParent(){return parent;}
+   void setleft(Node* exec){left = exec;}
+   void setright(Node* connex){right = connex;}
+   Juat* getJuat(){return j;}
    void evaluate(){
-   hohen = j->run();
+   	hohen = j->run();
    }
    bool getHohenheim(){return hohen;}
 };
@@ -29,9 +34,9 @@ protected:
    Node* power;
 
 public:
-   Command(){}
+   Command();
    void start_Command_prompt();
-   bool getEqex(){return eqex;}
+   bool getEqex();
    bool run();
 
 };

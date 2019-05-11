@@ -6,7 +6,7 @@
 class SemiColon : public Connector{
 public:
 
-SemiColon();
+SemiColon(){}
 
 bool run(bool runned);
 
