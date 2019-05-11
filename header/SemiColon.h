@@ -1,14 +1,14 @@
 #ifndef __SEMICOLONSTRAT_H__
 #define __SEMICOLONSTRAT_H__
+
 #include "Connector.h"
 
 class SemiColon : public Connector{
+public:
 
-virtual bool run(bool runned){
+SemiColon();
 
-return true;
-}
-
+bool run(bool runned);
 };
 
 #endif

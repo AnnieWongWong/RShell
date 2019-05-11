@@ -2,15 +2,12 @@
 #define _JUAT_H_
 
 #include <string>
-	
+using namespace std;
 
 class Juat{
 	public:
-		Juat(){}
-		virtual void run() = 0;
-		virtual string get_Line() = 0;
-
-
+		Juat(){};
+		virtual bool run() = 0;
 };
 
 

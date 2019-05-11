@@ -2,18 +2,18 @@
 #define _CONNECTOR_H_
 
 #include "Juat.h"
+#include "Command.h"
 
 class Connector: public Juat{
-	private:
+	protected:
  		string connex;
 		Command* comma;
 
 	public:
 		Connector(){	};
-		Connector(string c){connex = c};
-		virtual string get_Line() = 0;	
-		virtual bool run() = 0;
-}
+		Connector(string c){connex = c;};
+		virtual bool run(){return true;};
+};
 
 	
 

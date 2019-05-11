@@ -3,6 +3,8 @@
 #include "Connector.h"
 
 class OrStrat : public Connector{
+public:
+OrStrat(){connex = "||";};
 
 virtual bool run(bool runned){
 if(runned == false) return true;

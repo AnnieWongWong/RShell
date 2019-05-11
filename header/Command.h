@@ -1,7 +1,7 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 #include "Juat.h"
-
+#include <iostream>
 class Node{
 friend class Command;
 protected:
@@ -29,10 +29,10 @@ protected:
    Node* power;
 
 public:
+   Command(){};
    void start_Command_prompt(){cout << "$ ";}
    bool getEqex(){return eqex;}
-   void run();
-   string get_Line();
+   bool run();
 
 };
 #endif

@@ -1,10 +1,9 @@
 #ifndef __CONNECTOR_TESTS_CPP__
 #define __CONNECTOR_TESTS_CPP__
-#include "Connector.h"
-#include "SemiColon.h"
-#include "AndStrat.h"
-#include "OrStrat.h"
-
+#include "../header/Connector.h"
+#include "../header/AndStrat.h"
+#include "../header/OrStrat.h"
+#include "../src/SemiColon.cpp"
 #include "gtest/gtest.h"
 
 TEST(Connectors, Semi1) {
