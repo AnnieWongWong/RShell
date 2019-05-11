@@ -29,8 +29,8 @@ protected:
    Node* power;
 
 public:
-   Command(){};
-   void start_Command_prompt(){cout << "$ ";}
+   Command(){}
+   void start_Command_prompt();
    bool getEqex(){return eqex;}
    bool run();
 

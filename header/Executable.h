@@ -4,14 +4,21 @@
 #include <vector>
 using namespace std;
 
+#include <vector>
+using namespace std;
+
 class Executable: public Juat{
     private:
         vector<string> exec;
         
     public:
-        Executable(){};
+        Executable(){}
         Executable(vector<string> executable){exec = executable;}
         bool run();
 };
 
+<<<<<<< HEAD
 #endif
+=======
+#endif _EXECUTABLE_H_
+>>>>>>> AW

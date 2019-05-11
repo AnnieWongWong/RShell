@@ -6,7 +6,7 @@ using namespace std;
 
 class Juat{
 	public:
-		Juat(){};
+		Juat(){}
 		virtual bool run() = 0;
 };
 

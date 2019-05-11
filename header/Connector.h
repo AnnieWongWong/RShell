@@ -10,7 +10,7 @@ class Connector: public Juat{
 		Command* comma;
 
 	public:
-		Connector(){	};
+		Connector(){	}
 		Connector(string c){connex = c;};
 		virtual bool run(){return true;};
 };
