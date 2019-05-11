@@ -23,7 +23,7 @@ bool Executable::run(){
 	if (pid == 0){
 		//kid
 		if (execvp(args[0], args) == -1){
-			perror("BROKE");
+			perror("fail");
 			status = 1;
 			_exit(status);
 		}
