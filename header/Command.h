@@ -29,10 +29,10 @@ protected:
    Node* power;
 
 public:
-   void start_Command_prompt(){cout << "$ ";}
+   Command();
+   void start_Command_prompt();
    bool getEqex(){return eqex;}
-   void run();
-   string get_Line();
+   bool run();
 
 };
 #endif

@@ -1,15 +1,17 @@
 #ifndef _EXECUTABLE_H_
 #define _EXECUTABLE_H_
 
+#include <vector>
+using namespace std;
+
 class Executable: public Juat{
     private:
-        string exec;
+        vector<string> exec;
         
     public:
         Executable(){}
-        Executable(string executable){exec = executable;}
-        string get_Line(){ return "Nothing";}
-        void run();
+        Executable(vector<string> executable){exec = executable;}
+        bool run();
 };
 
 #endif _EXECUTABLE_H_

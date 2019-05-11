@@ -10,11 +10,9 @@ class Connector: public Juat{
 
 	public:
 		Connector(){	};
-		Connector(string c){connex = c};
-		virtual string get_Line() = 0;	
+		Connector(string c){connex = c};	
 		virtual bool run() = 0;
 }
-
 	
 
 #endif
