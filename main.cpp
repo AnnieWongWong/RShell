@@ -10,14 +10,17 @@
 #include "header/OrStrat.h"
 #include "header/AndStrat.h"
 #include "header/Command.h"
-
+#include "src/Command.cpp"
+#include "src/SemiColon.cpp"
 using namespace std;
 
 
 int main() {
 
 Command start;
-start.run();
-
-
+bool weRun = true;
+while(weRun){
+weRun = start.run();
+}
+return 0;s
 }
