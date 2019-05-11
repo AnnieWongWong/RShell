@@ -1,6 +1,7 @@
 #ifndef _EXECUTABLE_H_
 #define _EXECUTABLE_H_
 #include "Juat.h"
+#include <string>
 #include <vector>
 using namespace std;
 

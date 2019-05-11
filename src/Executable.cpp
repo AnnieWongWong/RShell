@@ -1,10 +1,14 @@
+#ifndef __EXECUTABLE_CPP__
+#define __EXECUTABLE_CPP__
+
+#include "../header/Executable.h"
 #include <iostream>
 #include <stdio.h>     //to use perror
 #include <unistd.h>    //to use execvp + fork
 #include <sys/wait.h>  //to use waitpid
 #include <sys/types.h> //to use waitpid
 #include <stdlib.h>
-#include "../header/Executable.h"
+
 
 using namespace std;
 
@@ -53,4 +57,4 @@ string Executable::checkExit(){
 
 }
 
-
+#endif
