@@ -5,8 +5,7 @@
 class OrStrat : public Connector{
 public:
 OrStrat(){connex = "||";};
-virtual bool run(){ return true;}
-virtual bool run2(bool runned){
+virtual bool run(bool runned){
 	if(runned == false) 
 		return true;
 	else {
@@ -14,6 +13,5 @@ virtual bool run2(bool runned){
 	}
 }
 
-string getConnex(){return connex;}
 };
 #endif
