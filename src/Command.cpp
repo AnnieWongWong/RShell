@@ -1,42 +1,55 @@
 #include <iostream>
-#include <string>
+#include <sstream>
 #include <vector>
 #include <unistd.h> 
 #include <stdio.h>
 #include <string.h>
-#include "../header/AndStrat.h"
-#include "../header/Command.h"
-#include "../header/OrStrat.h"
-#include "../header/SemiColon.h"
-#include "../header/Executable.h"
-
+#include "Juat.h"
+#include "Executable.h"
+#include "SemiColon.h"
+#include "OrStrat.h"
+#include "AndStrat.h"
 
 using namespace std;
 
+void printInorder(struct Node* node) 
+{ 
+    if (node == NULL) 
+        return; 
+  
+    /* first recur on left child */
+    printInorder(node->left); 
+  
+    /* then print the data of node */
+    if (node->getIsRoot()){
+        node->getParent()->setBool(node->j->run(true));
+    }
+    else {
+        if (node->j->run(node->successful())){
+            if(node->getParent() != NULL){
+                node->getParent()->setBool(node->right->j->run(true));
+            }
+            else {
+                node->right->j->run(true);
+            }
+        }
+    }
+} 
 
 
-Command::Command(){
-    this->root = NULL;
-    this->power = NULL;
-}
+int main(){
+    // Executable x;
+    // x.run();
+    
 
-void Command::start_Command_prompt(){
-    cout << "$ ";
-}
+    vector< vector<string> > commandList;
+    vector<string> unfilteredCommand;
+    string userCommand;
 
-bool Command::getEqex(){
-    return eqex;
-}
+    this->start_Command_prompt();
+    getline(cin,userCommand);
 
-bool Command::run(){
-  bool timeToExit = true;
-  vector< vector<string> > commandList;
-  vector<string> unfilteredCommand;
-	string userCommand;
 
-	this->start_Command_prompt();
-	getline(cin,userCommand);
-	
 	string exitt = userCommand.substr(0,4);
 	if (exitt == "exit"){
 			return 0;
@@ -46,7 +59,7 @@ bool Command::run(){
 	
 	char* point = (char*)userCommand.c_str();
     char* pch;
-    pch = strtok(point," ");
+    pch = strtok (point," ");
     
     bool prevConnector = false;
     bool firstEntry = true;
@@ -132,27 +145,28 @@ bool Command::run(){
                 }
             }
         }
-         pch = strtok(NULL," ");
+         pch = strtok (NULL," ");
          commandExists = true;
             
     }
     
     bool isConnector = false;
-    bool lastNodE = false;
     bool firstNode = true;
-    bool firstConnector = true;
-    int i;
-    Juat* newJuat;
-   for ( i = 0; i < commandList.size(); i++){
-            if (commandList.at(i).at(0) == ";"){
+    Node* root;
+    Node* last;
+    
+    for (int i = 0; i < commandList.size(); i++){
+        Juat* newJuat;
+        for(int j = 0; j < commandList.at(i).size(); j++){
+            if (commandList.at(i).at(j) == ";"){
                 newJuat = new SemiColon;
                 isConnector = true;
             }
-            else if (commandList.at(i).at(0) == "&&"){
+            else if (commandList.at(i).at(j) == "&&"){
                 newJuat = new AndStrat;
                 isConnector = true;
             }
-            else if (commandList.at(i).at(0) == "||"){
+            else if (commandList.at(i).at(j) == "||"){
                 newJuat = new OrStrat;
                 isConnector = true;
             }
@@ -160,51 +174,40 @@ bool Command::run(){
                 newJuat = new Executable(commandList.at(i));
                 isConnector = false;
             }
-            
             if (firstNode){
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                current->setRoot();
                 firstNode = false;
-                power = current;
                 root = current;
-                if(!isConnector) lastNodE = true;
-            }
-            else if (isConnector && firstConnector){
-                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-                root = current;
-                current->setLeft(power);
-                power = current;
-                firstConnector = false;
-                lastNodE = false;
             }
             else if (isConnector){
-                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-                current->setRight(root->right);
-                current->setLeft(root);
-                root = current;
-                lastNodE = false;
+                Node* current = root;
+                Node* next = new Node(current, NULL, NULL, newJuat, true);\
+               // next->setConnecter();
+                current->setParent(next);
+                root = next;
             }
             else {
-                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-                current->setRight(root);
-                root = current;
-                lastNodE = true;
+                Node* current = root;
+                Node* next = new Node(NULL, NULL, current, newJuat, true);
+                current->setright(next);
             }
+            
+        }
     }
-    if(lastNodE == true){
-      Juat* newJuat = new SemiColon;
-      Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-      this->power = current;
-      current->setLeft(root);
-      this->root = current;
-    }
-    Node* trav = this->power;
-    bool execRanned = false;
-    while(trav!=NULL){
-            if(trav->left->j->getConnex() == "exit"){
-              power = NULL;
-              root = NULL;
+    
+    // for (int i = 0; i < commandList.size(); i++){
+    //     for(int j = 0; j < commandList.at(i).size(); j++){
+    //         cout << commandList.at(i).at(j) << " ";
+    //     }
+    //     cout << endl;
+    // }
 
+    printInorder(root);
+
+
+        
+  return 0;
+}
 
     
-
-
