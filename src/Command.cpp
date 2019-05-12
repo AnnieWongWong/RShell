@@ -22,24 +22,27 @@ void Command::start_Command_prompt(){
     cout << "$ ";
 }
 
-void printInorder(struct Node* node) 
+bool printInorder(struct Node* node) 
 { 
     if (node == NULL) 
-        return; 
+        return true; 
   
     /* first recur on left child */
     printInorder(node->left); 
   
     /* then print the data of node */
     if (node->getIsRoot()){
+        if (node->j->getstring() == "exit") return false;
         node->getParent()->setBool(node->j->run(true));
     }
     else {
         if (node->j->run(node->successful())){
             if(node->getParent() != NULL){
+                if (node->right->j->getstring() == "exit") return false;
                 node->getParent()->setBool(node->right->j->run(true));
             }
             else {
+                if (node->right->j->getstring() == "exit") return false;
                 node->right->j->run(true);
             }
         }
@@ -49,6 +52,7 @@ void printInorder(struct Node* node)
 
 bool Command::run(bool x) {
 
+    bool again = true;
     vector< vector<string> > commandList;
     vector<string> unfilteredCommand;
     string userCommand;
@@ -59,7 +63,7 @@ bool Command::run(bool x) {
 
 	string exitt = userCommand.substr(0,4);
 	if (exitt == "exit"){
-			return 0;
+			return false;
 	}
 	
 	userCommand = userCommand.substr(0, userCommand.find(" #"));
@@ -210,11 +214,11 @@ bool Command::run(bool x) {
     //     cout << endl;
     // }
 
-    printInorder(root);
+    again = printInorder(root);
 
 
         
-  return 0;
+  return again;
 }
 
     

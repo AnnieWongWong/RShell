@@ -8,7 +8,7 @@ class Juat{
 	public:
 		Juat(){}
 		virtual bool run(bool x) = 0;
-		virtual void getstring() = 0;
+		virtual string getstring() = 0;
 };
 
 

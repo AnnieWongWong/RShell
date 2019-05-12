@@ -21,8 +21,8 @@ class Executable : public Juat{
             }
         }
         Executable(vector<string> executable){exec = executable;}
-        void getstring(){
-            cout << exec.at(0) << " ";
+        string getstring(){
+            return exec.at(0);
         }
         bool run(bool x);
 };

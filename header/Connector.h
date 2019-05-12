@@ -14,7 +14,7 @@ class Connector: public Juat{
 		Connector(){	}
 		Connector(string c){connex = c;}
 		virtual bool run(bool x){return true;}
-		virtual void getstring(){}
+		virtual string getstring(){}
 };
 
 	
