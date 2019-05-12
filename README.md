@@ -1,6 +1,6 @@
 # CS 100 RShell Programming Project
 
-> Author(s): Annie Wong (862047406), Kevin Huo (862047406)
+> Author(s): Annie Wong (862047406), Kevin Huo (861152117)
 
 > Spring 2019
 
