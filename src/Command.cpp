@@ -32,8 +32,14 @@ bool printInorder(struct Node* node)
   
     /* then print the data of node */
     if (node->getIsRoot()){
-        if (node->j->getstring() == "exit") return false;
-        node->getParent()->setBool(node->j->run(true));
+        if (node->j->getstring() == "exit")
+           return false;
+        if (node->getParent() != NULL){
+            node->getParent()->setBool(node->j->run(true));
+        }
+        else {
+            node->j->run(true);
+        }
     }
     else {
         if (node->j->run(node->successful())){
