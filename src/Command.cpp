@@ -138,22 +138,23 @@ bool Command::run(){
     }
     
     bool isConnector = false;
-    bool lastNodE = true;
+    bool lastNodE = false;
     bool firstNode = true;
     bool firstConnector = true;
-    
-   for (int i = 0; i < commandList.size(); i++){
-        Juat* newJuat;
-        for(int j = 0; j < commandList.at(i).size(); j++){
-            if (commandList.at(i).at(j) == ";"){
+    int i;
+    Juat* newJuat;
+   for ( i = 0; i < commandList.size(); i++){
+        
+        cout << "yes1\n";
+            if (commandList.at(i).at(0) == ";"){
                 newJuat = new SemiColon;
                 isConnector = true;
             }
-            else if (commandList.at(i).at(j) == "&&"){
+            else if (commandList.at(i).at(0) == "&&"){
                 newJuat = new AndStrat;
                 isConnector = true;
             }
-            else if (commandList.at(i).at(j) == "||"){
+            else if (commandList.at(i).at(0) == "||"){
                 newJuat = new OrStrat;
                 isConnector = true;
             }
@@ -161,6 +162,7 @@ bool Command::run(){
                 newJuat = new Executable(commandList.at(i));
                 isConnector = false;
             }
+            
             if (firstNode){
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
                 firstNode = false;
@@ -176,10 +178,10 @@ bool Command::run(){
                 lastNodE = false;
             }
             else if (isConnector){
+            cout << i << "yes4\n";
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
                 current->setRight(root->right);
                 current->setLeft(root);
-                current->right->setRight(NULL);
                 root = current;
                 lastNodE = false;
             }
@@ -187,24 +189,40 @@ bool Command::run(){
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
                 current->setRight(root);
                 root = current;
-                lastNodE = false;
+                lastNodE = true;
             }
-            
-        }
+            cout << i << "yes4\n";
     }
-    
-    if(lastNodE){
+        
+    if(lastNodE && i>1){
+    cout << "yes3\n";
         Juat* newJuat = new SemiColon;
         Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+        cout << "yes3.1\n";
                 current->setRight(root->right);
+                cout << "yes3.2\n";
                 current->setLeft(root);
+                cout << "yes3.3\n";
                 current->left->setRight(NULL);
                 root = current;
+                cout << "yes3.3\n";
+    }
+    else if(lastNodE == true){
+    cout << i << "yes4\n";
+      Juat* newJuat = new SemiColon;
+      Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+      this->power = current;
+      current->setLeft(root);
+      this->root = current;
     }
     
+    cout << i << "yes4\n";
     Node* trav = this->power;
+    cout << "yes5\n";
     bool execRanned = false;
+    cout << "yes6\n";
     while(trav!=NULL){
+    cout << "yes2\n";
             if(trav->left->j->getConnex() == "exit"){
               timeToExit = false;
               trav == NULL;
@@ -229,7 +247,7 @@ bool Command::run(){
                 }
               }
             }
-    
+    cout << "shabalaba\n";
     }
 	return timeToExit;
 }

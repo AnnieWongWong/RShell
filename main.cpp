@@ -12,6 +12,7 @@
 #include "header/Command.h"
 #include "src/Command.cpp"
 #include "src/SemiColon.cpp"
+#include "src/Executable.cpp"
 using namespace std;
 
 

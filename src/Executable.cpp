@@ -51,7 +51,7 @@ bool Executable::run(){
 
 }
 
-string Executable::checkExit(){
+string Executable::getConnex(){
   string ex = exec.at(0);
   return ex;
 
