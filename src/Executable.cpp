@@ -4,7 +4,7 @@
 #include <sys/wait.h>  //to use waitpid
 #include <sys/types.h> //to use waitpid
 #include <stdlib.h>
-#include "Executable.h"
+#include "../header/Executable.h"
 
 using namespace std;
 
