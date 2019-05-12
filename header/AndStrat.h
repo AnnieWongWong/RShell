@@ -11,6 +11,6 @@ virtual bool run(bool runned){
 if(runned == true) return true;
 else return false;
 }
-string getConnex(){return connex;}
+string getstring(){return connex;}
 };
 #endif

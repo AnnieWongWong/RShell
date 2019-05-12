@@ -8,7 +8,7 @@ public:
 
 bool run(bool runned);
 
-string getConnex(){return connex;}
+string getstring(){return connex;}
 
 };
 
