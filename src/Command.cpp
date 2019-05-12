@@ -12,6 +12,16 @@
 
 using namespace std;
 
+
+Command::Command(){
+    this->root = NULL;
+    this->power = NULL;
+}
+
+void Command::start_Command_prompt(){
+    cout << "$ ";
+}
+
 void printInorder(struct Node* node) 
 { 
     if (node == NULL) 
@@ -46,7 +56,7 @@ int main(){
     vector<string> unfilteredCommand;
     string userCommand;
 
-    this->start_Command_prompt();
+    start_Command_prompt();
     getline(cin,userCommand);
 
 
