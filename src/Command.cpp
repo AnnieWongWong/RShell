@@ -144,8 +144,6 @@ bool Command::run(){
     int i;
     Juat* newJuat;
    for ( i = 0; i < commandList.size(); i++){
-        
-        cout << "yes1\n";
             if (commandList.at(i).at(0) == ";"){
                 newJuat = new SemiColon;
                 isConnector = true;
@@ -168,6 +166,7 @@ bool Command::run(){
                 firstNode = false;
                 power = current;
                 root = current;
+                if(!isConnector) lastNodE = true;
             }
             else if (isConnector && firstConnector){
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
@@ -178,7 +177,6 @@ bool Command::run(){
                 lastNodE = false;
             }
             else if (isConnector){
-            cout << i << "yes4\n";
                 Node* current = new Node(NULL, NULL, NULL, newJuat, true);
                 current->setRight(root->right);
                 current->setLeft(root);
@@ -191,41 +189,22 @@ bool Command::run(){
                 root = current;
                 lastNodE = true;
             }
-            cout << i << "yes4\n";
     }
-        
-    if(lastNodE && i>1){
-    cout << "yes3\n";
-        Juat* newJuat = new SemiColon;
-        Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-        cout << "yes3.1\n";
-                current->setRight(root->right);
-                cout << "yes3.2\n";
-                current->setLeft(root);
-                cout << "yes3.3\n";
-                current->left->setRight(NULL);
-                root = current;
-                cout << "yes3.3\n";
-    }
-    else if(lastNodE == true){
-    cout << i << "yes4\n";
+    if(lastNodE == true){
       Juat* newJuat = new SemiColon;
       Node* current = new Node(NULL, NULL, NULL, newJuat, true);
       this->power = current;
       current->setLeft(root);
       this->root = current;
     }
-    
-    cout << i << "yes4\n";
     Node* trav = this->power;
-    cout << "yes5\n";
     bool execRanned = false;
-    cout << "yes6\n";
     while(trav!=NULL){
     cout << "yes2\n";
             if(trav->left->j->getConnex() == "exit"){
+            cout << "yes\n";
               timeToExit = false;
-              trav == NULL;
+              return timeToExit;
             }
             trav->left->evaluate1();
             execRanned = trav->left->getHohenheim();
