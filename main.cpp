@@ -21,7 +21,7 @@ int main() {
 Command* start = new Command;
 bool weRun = true;
 while(weRun){
-weRun = start->run();
+weRun = start->run(true);
 }
 return 0;
 }

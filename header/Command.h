@@ -46,6 +46,7 @@ public:
    void start_Command_prompt();
    bool getEqex(){return eqex;}
    bool run(bool x);
+   string getstring(){return " ";}
 
 };
 #endif
