@@ -1,21 +1,30 @@
 #ifndef _EXECUTABLE_H_
 #define _EXECUTABLE_H_
-#include "Juat.h"
-#include <string>
 #include <vector>
+#include "Juat.h"
 using namespace std;
 
-class Executable: public Juat{
+class Executable : public Juat{
     private:
         vector<string> exec;
         
     public:
-        Executable(){}
+        Executable(){ 
+            string x ;
+            int i = 0;
+            
+            while (i != 2){
+                cout << "enter string" << endl;
+                cin >> x;
+                exec.push_back(x);
+                i++;
+            }
+        }
         Executable(vector<string> executable){exec = executable;}
-        bool run();
-        bool run2(bool prev){return false;}
-        string getConnex();
+        void getstring(){
+            cout << exec.at(0) << " ";
+        }
+        bool run(bool x);
 };
 
-#endif 
-
+#endif

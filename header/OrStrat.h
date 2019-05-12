@@ -5,15 +5,11 @@
 class OrStrat : public Connector{
 public:
 OrStrat(){connex = "||";};
-virtual bool run(){ return true;}
-virtual bool run2(bool runned){
-	if(runned == false) 
-		return true;
-	else {
-	 return false;
-	}
-}
 
-string getConnex(){return connex;}
+virtual bool run(bool runned){
+if(runned == false) return true;
+else return false;
+}
+string getErOfSe(){return connex;}
 };
 #endif

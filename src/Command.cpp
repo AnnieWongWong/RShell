@@ -200,9 +200,7 @@ bool Command::run(){
     Node* trav = this->power;
     bool execRanned = false;
     while(trav!=NULL){
-    cout << "yes2\n";
             if(trav->left->j->getConnex() == "exit"){
-            cout << "yes\n";
               timeToExit = false;
               return timeToExit;
             }
@@ -226,7 +224,6 @@ bool Command::run(){
                 }
               }
             }
-    cout << "shabalaba\n";
     }
 	return timeToExit;
 }
