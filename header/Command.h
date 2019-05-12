@@ -45,7 +45,7 @@ public:
    Command();
    void start_Command_prompt();
    bool getEqex(){return eqex;}
-   bool run();
+   bool run(bool x);
 
 };
 #endif

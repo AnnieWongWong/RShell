@@ -47,16 +47,13 @@ void printInorder(struct Node* node)
 } 
 
 
-int main(){
-    // Executable x;
-    // x.run();
-    
+bool Command::run(bool x) {
 
     vector< vector<string> > commandList;
     vector<string> unfilteredCommand;
     string userCommand;
 
-    start_Command_prompt();
+    this->start_Command_prompt();
     getline(cin,userCommand);
 
 
