@@ -9,33 +9,33 @@
 TEST(Connectors, Semi1) {
    bool runns = true;
    SemiColon* semi = new SemiColon();
-   EXPECT_EQ(semi->run2(runns),true);
+   EXPECT_EQ(semi->run(runns),true);
    EXPECT_EQ(semi->getConnex(),";");
 }
 
 TEST(Connectors, Semi2) {
    bool runns = false;
    SemiColon* semi = new SemiColon();
-   EXPECT_EQ(semi->run2(runns),true);
+   EXPECT_EQ(semi->run(runns),true);
 }
 
 TEST(Connectors, And1) {
    bool runns = true;
    AndStrat* and1 = new AndStrat();
-   EXPECT_EQ(and1->run2(runns),true);
+   EXPECT_EQ(and1->run(runns),true);
    EXPECT_EQ(and1->getConnex(),"&&");
 }
 
 TEST(Connectors, And2) {
    bool runns = false;
    AndStrat* or1 = new AndStrat();
-   EXPECT_EQ(or1->run2(runns),false);
+   EXPECT_EQ(or1->run(runns),false);
 }
 
 TEST(Connectors, Or1) {
    bool runns = false;
    OrStrat* or2 = new OrStrat();
-   EXPECT_EQ(or2->run2(runns),true);
+   EXPECT_EQ(or2->run(runns),true);
    EXPECT_EQ(or2->getConnex(),"||");
 }
 
