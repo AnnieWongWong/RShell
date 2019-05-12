@@ -203,34 +203,6 @@ bool Command::run(){
             if(trav->left->j->getConnex() == "exit"){
               power = NULL;
               root = NULL;
-              timeToExit = false;
-              return timeToExit;
-            }
-            trav->left->evaluate1();
-            execRanned = trav->left->getHohenheim();
-            trav->evaluate2(execRanned);
-            if(trav->j->getConnex() == ";")trav = trav->getParent();
-            else if(trav->j->getConnex() == "&&"){
-              if(trav->getHohenheim()) trav = trav->getParent();
-              else{
-                while(trav->j->getConnex() == "&&" || trav!= NULL){
-                    trav = trav->getParent();                
-                }
-              }
-            }
-            else if(trav->j->getConnex() == "||"){
-              if(!trav->getHohenheim())trav = trav->getParent();
-              else{
-                while(trav->j->getConnex() == "||" || trav!= NULL){
-                    trav = trav->getParent();                
-                }
-              }
-            }
-    }
-  power = NULL;
-  root = NULL;
-	return timeToExit;
-}
 
 
     

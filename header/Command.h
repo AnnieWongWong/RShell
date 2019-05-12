@@ -6,14 +6,17 @@ class Node{
 friend class Command;
 protected:
    Node* parent;
-   Juat* j;
-   bool hohen;
+   
+   bool success;
+   bool isRoot;
+   bool isConnecter;
 
 public:
    Node* left;
    Node* right;
-   Node(){left = 0; right  = 0; parent = 0; j = 0; hohen = false;}
-   Node(Node* l, Node* r, Node* p, Juat* jay, bool heim){left = l; right = r; parent = p; j = jay; hohen = heim;}
+   Juat* j;
+   Node(){left = 0; right  = 0; parent = 0; j = 0; success = false;}
+   Node(Node* l, Node* r, Node* p, Juat* jay, bool heim){left = l; right = r; parent = p; j = jay; success = heim;}
    void setLeft(Node* exec){left = exec; exec->parent = this;}
    void setRight(Node* connex){right = connex; connex->parent = this;}
    void setParent(Node* p){ parent = p;}
@@ -21,13 +24,15 @@ public:
    void setleft(Node* exec){left = exec;}
    void setright(Node* connex){right = connex;}
    Juat* getJuat(){return j;}
-   void evaluate1(){
-   	hohen = j->run();
+   void setRoot(){isRoot = true;}
+   bool getIsRoot(){return isRoot;}
+   bool getIsConnector(){return isConnecter;}
+   void setConnector(){isConnecter = true;}
+   bool evaluate(){
+      return j->run(success);
    }
-   void evaluate2(bool prevRan){
-   	hohen = j->run2(prevRan);
-   }
-   bool getHohenheim(){return hohen;}
+   void setBool(bool succes){success = succes;}
+   bool successful(){return success;}
 };
 
 class Command : public Juat{
@@ -39,10 +44,8 @@ protected:
 public:
    Command();
    void start_Command_prompt();
-   bool getEqex();
+   bool getEqex(){return eqex;}
    bool run();
-   bool run2(bool prev){return false;};
-   string getConnex(){return 0;}
 
 };
 #endif

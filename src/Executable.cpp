@@ -1,19 +1,15 @@
-#ifndef __EXECUTABLE_CPP__
-#define __EXECUTABLE_CPP__
-
-#include "../header/Executable.h"
 #include <iostream>
 #include <stdio.h>     //to use perror
 #include <unistd.h>    //to use execvp + fork
 #include <sys/wait.h>  //to use waitpid
 #include <sys/types.h> //to use waitpid
 #include <stdlib.h>
-
+#include "Executable.h"
 
 using namespace std;
 
 
-bool Executable::run(){
+bool Executable::run(bool x){
 	int status = 0;
 	char* args[exec.size()+1];
 	
@@ -27,7 +23,7 @@ bool Executable::run(){
 	if (pid == 0){
 		//kid
 		if (execvp(args[0], args) == -1){
-			perror("fail");
+			perror("BROKE");
 			status = 1;
 			_exit(status);
 		}
@@ -51,10 +47,3 @@ bool Executable::run(){
 
 }
 
-string Executable::getConnex(){
-  string ex = exec.at(0);
-  return ex;
-
-}
-
-#endif

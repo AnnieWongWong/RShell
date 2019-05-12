@@ -3,6 +3,7 @@
 
 #include "Juat.h"
 #include "Command.h"
+using namespace std;
 
 class Connector: public Juat{
 	protected:
@@ -11,9 +12,9 @@ class Connector: public Juat{
 
 	public:
 		Connector(){	}
-		Connector(string c){connex = c;};
-    virtual bool run(){return true;};
-		virtual bool run2(){return true;};
+		Connector(string c){connex = c;}
+		virtual bool run(bool x){return true;}
+		virtual void getstring(){}
 };
 
 	
