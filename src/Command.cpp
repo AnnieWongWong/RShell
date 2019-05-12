@@ -4,11 +4,11 @@
 #include <unistd.h> 
 #include <stdio.h>
 #include <string.h>
-#include "Juat.h"
-#include "Executable.h"
-#include "SemiColon.h"
-#include "OrStrat.h"
-#include "AndStrat.h"
+#include "../header/Juat.h"
+#include "../header/Executable.h"
+#include "../header/SemiColon.h"
+#include "../header/OrStrat.h"
+#include "../header/AndStrat.h"
 
 using namespace std;
 
