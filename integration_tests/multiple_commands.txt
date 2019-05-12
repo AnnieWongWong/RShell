@@ -1,0 +1,3 @@
+ls || mkdir AW || git status
+ls -al; echo hell && mkdir direction || echo o; git status
+; mkdir hello && ls; pwd;
