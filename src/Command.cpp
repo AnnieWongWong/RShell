@@ -32,13 +32,13 @@ bool printInorder(struct Node* node)
   
     /* then print the data of node */
     if (node->getIsRoot()){
-        if (node->j->getstring() == "exit")
-           return false;
+        if (node->j->getstring() == "exit") return false;
         if (node->getParent() != NULL){
             node->getParent()->setBool(node->j->run(true));
         }
         else {
             node->j->run(true);
+						return true;
         }
     }
     else {
@@ -50,10 +50,13 @@ bool printInorder(struct Node* node)
             else {
                 if (node->right->j->getstring() == "exit") return false;
                 node->right->j->run(true);
+								return true;
             }
         }
+				if (node->getParent() == NULL) return true;
     }
 } 
+
 
 
 bool Command::run(bool x) {
