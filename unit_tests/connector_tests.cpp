@@ -40,13 +40,24 @@ TEST(Connectors, Or1) {
    EXPECT_EQ(or2->getstring(),"||");
 }
 
-TEST(Executable, ls) {
+TEST(Executable, singleLine) {
    vector<string> commandLine;
 		commandLine.push_back("ls");
 		Executable exec(commandLine);
   
    EXPECT_EQ(exec.run(true),true);
    EXPECT_EQ(exec.getstring(),"ls");
+}
+
+TEST(Executable, multipleLine) {
+   vector<string> commandLine;
+		commandLine.push_back("pwd");
+		commandLine.push_back("&&");
+		commandLine.push_back("ls");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),true);
+   EXPECT_EQ(exec.getstring(),"pwd");
 }
 
 
