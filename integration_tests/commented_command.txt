@@ -1,3 +1,4 @@
 #comment is I dont read me
 ls -a && mkdir dir #hello
 git status # ls -a
+exit

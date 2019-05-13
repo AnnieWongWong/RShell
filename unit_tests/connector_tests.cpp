@@ -4,6 +4,7 @@
 #include "../header/AndStrat.h"
 #include "../header/OrStrat.h"
 #include "../src/SemiColon.cpp"
+#include "../src/Executable.cpp"
 #include "gtest/gtest.h"
 
 TEST(Connectors, Semi1) {
@@ -38,6 +39,17 @@ TEST(Connectors, Or1) {
    EXPECT_EQ(or2->run(runns),true);
    EXPECT_EQ(or2->getstring(),"||");
 }
+
+TEST(Executable, ls) {
+   vector<string> commandLine;
+		commandLine.push_back("ls");
+		Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),true);
+   EXPECT_EQ(exec.getstring(),"ls");
+}
+
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

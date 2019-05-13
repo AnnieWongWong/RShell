@@ -2,4 +2,4 @@
 #!/bin/sh
 #tests comments
 
-.bin/rshell  < "integration_tests/commented_command.txt"
+../rshell  < "commented_command.txt"

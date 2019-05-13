@@ -195,10 +195,12 @@ bool Command::run(bool x) {
                 isConnector = false;
             }
             if (firstNode){
-                Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-                current->setRoot();
-                firstNode = false;
-                root = current;
+                //if (!isConnector){
+                  Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                  current->setRoot();
+                  firstNode = false;
+                  root = current;
+                //}
             }
             else if (isConnector){
                 Node* current = root;

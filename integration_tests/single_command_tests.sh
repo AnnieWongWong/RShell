@@ -1,4 +1,4 @@
 #!/bin/sh
 #testing single commands
 
-.bin/rshell  < "integration_tests/single_command.txt"
+../rshell  < "single_command.txt"
