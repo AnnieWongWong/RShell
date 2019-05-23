@@ -38,7 +38,7 @@ bool printInorder(struct Node* node)
         }
         else {
             node->j->run(true);
-						return true;
+                        return true;
         }
     }
     else {
@@ -50,17 +50,16 @@ bool printInorder(struct Node* node)
             else {
                 if (node->right->j->getstring() == "exit") return false;
                 node->right->j->run(true);
-								return true;
+                                return true;
             }
         }
-				if (node->getParent() == NULL) return true;
+                if (node->getParent() == NULL) return true;
     }
 } 
 
 
 
 bool Command::run(bool x) {
-
     bool again = true;
     vector< vector<string> > commandList;
     vector<string> unfilteredCommand;
@@ -70,14 +69,34 @@ bool Command::run(bool x) {
     getline(cin,userCommand);
 
 
-	string exitt = userCommand.substr(0,4);
-	if (exitt == "exit"){
-			return false;
-	}
-	
-	userCommand = userCommand.substr(0, userCommand.find(" #"));
-	
-	char* point = (char*)userCommand.c_str();
+    string exitt = userCommand.substr(0,4);
+    if (exitt == "exit"){
+            return false;
+    }
+    
+    userCommand = userCommand.substr(0, userCommand.find(" #"));
+
+    int numLeftParen = 0;
+    int numRightParen = 0;
+    for (int i = 0; i < userCommand.size(); ++i)
+    {
+        if (userCommand.at(i) == '(')
+        {
+            numLeftParen++;
+        }
+        else if (userCommand.at(i) == ')')
+        {
+            numRightParen++;
+        }
+    }
+
+    if (numLeftParen != numRightParen)
+    {
+        cout << "Error: missing or extra parenthesis" << endl;
+        return true;
+    }
+    
+    char* point = (char*)userCommand.c_str();
     char* pch;
     pch = strtok (point," ");
     
@@ -85,80 +104,224 @@ bool Command::run(bool x) {
     bool firstEntry = true;
     bool semiColonExists = false;
     bool commandExists = true;
+    bool leftParenExists = false;
+    bool rightParenExists = false;
+    bool doubleConnector = false;
+    bool prevRightParen = false;
+    bool prevCommand = false;
     
     vector<string> andVect(1, "&&");
     vector<string> orVect(1, "||");
     vector<string> semiVect(1, ";");
-    
-    while (pch != NULL){
+    vector<string> leftParen(1, "(");
+    vector<string> rightParen(1, ")");
+
+    while (pch != NULL)
+    {
+        char lastChar = pch[strlen(pch)-1];
+        char firstChar = pch[0];
         string command = pch;
-        if (firstEntry){
-            if (pch[strlen(pch)-1] == ';'){
-                command = command.substr(0,command.size()-1);
-                semiColonExists = true;
+
+        if (firstEntry)
+        {
+            if ( command == ";" ||  command == "&&" || command == "||")         //if the user command start with a connector stop executung 
+            {
+                cout << "-bash: syntax error near unexpected token '" << command << "'" << endl;
+                return true;
             }
             
-            vector<string> temp;
+            if (firstChar == '(')
+            {
+                command = command.substr(1,command.size());
+                commandList.push_back(leftParen);
+                prevConnector = true;
+                leftParenExists = true;
+                commandExists = true;
+            }
+            
+            if (lastChar == ')'){
+                rightParenExists = true;
+                command = command.substr(0,command.size()-1);
+            }
+            
+            if (lastChar == ';')
+            {
+                semiColonExists = true;
+                commandExists = true;
+                prevConnector = true;
+                command = command.substr(0,command.size()-1);
+            }
+
             if (command.size() != 0){
+                vector<string> temp;
                 temp.push_back(command);
                 commandList.push_back(temp);
-            }
-            
-            if (semiColonExists){
-                commandList.push_back(semiVect);
-                semiColonExists = false;
-                prevConnector = true;
-            }
-            else{
+                prevCommand = true;
                 prevConnector = false;
             }
+            
+            if (semiColonExists)
+            {
+                commandList.push_back(semiVect);
+                semiColonExists = false;
+                prevCommand = false;
+                prevConnector = true;
+            }
+            
+            if (rightParenExists)
+            {
+                commandList.push_back(rightParen);
+                prevCommand = false;
+                prevConnector = true;
+                rightParenExists = false;
+            }
+
             firstEntry = false;
         }
         
-        else {
-            if (pch[strlen(pch)-1] == ';'){
-                command = command.substr(0,command.size()-1);
-                semiColonExists = true;
+        else 
+        {
+
+            if (firstChar == '(' && prevConnector || firstChar == '(' && commandList.size() == 1)              //For a left parenthesis to be valid the previous node must be a connector
+            {
+                command = command.substr(1,command.size());
+                commandList.push_back(leftParen);
+                prevCommand = false;
+                leftParenExists = true;
                 commandExists = true;
-            }
-            else if(pch[strlen(pch)-1] == '&' && pch[strlen(pch)-2] == '&'){
-                commandList.push_back(andVect);
                 prevConnector = true;
-                commandExists = false;
             }
-            else if(pch[strlen(pch)-1] == '|' && pch[strlen(pch)-2] == '|'){
-                commandList.push_back(orVect);
-                prevConnector = true;
-                commandExists = false;
+
+            if (lastChar == ';'){
+                if (prevConnector && command.size() == 1 && !leftParenExists && (prevRightParen && prevConnector)){         //a connector cannot follow another connector
+                    doubleConnector = true;
+                } 
+                else {
+                    command = command.substr(0,command.size()-1);
+                    semiColonExists = true;
+                    commandExists = true;
+                }
+            }
+            else if(command == "&&"){
+                if (prevConnector && !leftParenExists  && (prevRightParen && prevConnector)){                                  //a connector cannot follow another connector
+                    doubleConnector = true;
+                }
+                else {
+                    commandList.push_back(andVect);
+                    prevConnector = true;
+                    commandExists = false;
+                    prevCommand = false;
+                }
+            }
+            else if(command == "||"){
+                if (prevConnector && !leftParenExists && (prevRightParen && prevConnector)){                                     //a connector cannot follow another connector
+                    doubleConnector = true;
+                }         
+                else {
+                    commandList.push_back(orVect);
+                    prevConnector = true;
+                    commandExists = false;        
+                    prevCommand = false;
+                }      
+            }
+
+            if (doubleConnector)
+            {
+                cout << "-bash: syntax error near unexpected token r u here '" << command << "'" << endl;
+                doubleConnector = false;
+                return true;               
             }
             
             if (commandExists && prevConnector){
-                vector<string> temp;
+                if (lastChar == ')') {            //For a right parenthesis to be valid the previous node cannot be a connector
+                    rightParenExists = true;  
+                    leftParenExists = false;
+                }
+
                 
-                if (command.size() != 0){
-                    temp.push_back(command);
-                    commandList.push_back(temp);
+                string commandCopy = command;
+                if (rightParenExists){
+                    char lastCharCopy = commandCopy.at(commandCopy.size()-1);
+
+                    while (lastCharCopy == ')'){
+                        commandCopy = commandCopy.substr(0,commandCopy.size()-1);
+                        lastCharCopy = commandCopy.at(commandCopy.size()-1);
+                    }
                 }
                 
+                vector<string> temp;
+
+                if (commandCopy.size() != 0){
+                    temp.push_back(commandCopy);
+                    commandList.push_back(temp);
+                    prevConnector = false;
+                    prevCommand = true;
+                }
+                
+                if (rightParenExists)
+                {
+                    while (lastChar == ')'){
+                        command = command.substr(0,command.size()-1);
+                        commandList.push_back(rightParen);
+                        lastChar = command.at(command.size()-1);
+                    }
+                    prevConnector = true;
+                    rightParenExists = false;
+                    prevCommand = false;
+                }
+
                 if (semiColonExists){
                     commandList.push_back(semiVect);
-                    semiColonExists = false;
                     prevConnector = true;
+                    prevCommand = false;
+                    semiColonExists = false;
                 }
                 else {
                     prevConnector = false;
                 }
             }
             
-            else if(commandExists && !prevConnector){
-                if (command.size() != 0){
-                    commandList.at(commandList.size()-1).push_back(command);
+            else if(prevCommand || commandExists && !prevConnector || commandExists && rightParenExists || commandExists && leftParenExists)
+            {
+                if (lastChar == ')') {          
+                    rightParenExists = true;  
                 }
+
+                string commandCopy = command;
+                if (rightParenExists){
+                    char lastCharCopy = commandCopy.at(commandCopy.size()-1);
+
+                    while (lastCharCopy == ')'){
+                        commandCopy = commandCopy.substr(0,commandCopy.size()-1);
+                        lastCharCopy = commandCopy.at(commandCopy.size()-1);
+                    }
+                }
+
+                if (commandCopy.size() != 0){
+                    commandList.at(commandList.size()-1).push_back(commandCopy);
+                    prevConnector = false;
+                    prevCommand = true;
+                }
+
+                if (rightParenExists)
+                {
+                    while (lastChar == ')'){
+                        command = command.substr(0,command.size()-1);
+                        commandList.push_back(rightParen);
+                        lastChar = command.at(command.size()-1);
+                    }
+                    prevConnector = true;
+                    rightParenExists = false;
+                    leftParenExists = false;
+                    prevRightParen = true;
+                    prevCommand = false;
+                }                
                 
                 if (semiColonExists){
                     commandList.push_back(semiVect);
-                    semiColonExists = false;
                     prevConnector = true;
+                    semiColonExists = false;
+                    prevCommand = false;
                 }
                 else {
                     prevConnector = false;
@@ -218,12 +381,12 @@ bool Command::run(bool x) {
         }
     }
     
-    // for (int i = 0; i < commandList.size(); i++){
-    //     for(int j = 0; j < commandList.at(i).size(); j++){
-    //         cout << commandList.at(i).at(j) << " ";
-    //     }
-    //     cout << endl;
-    // }
+    for (int i = 0; i < commandList.size(); i++){
+        for(int j = 0; j < commandList.at(i).size(); j++){
+            cout << commandList.at(i).at(j) << " ";
+        }
+        cout << endl;
+    }
 
     again = printInorder(root);
 
@@ -232,4 +395,3 @@ bool Command::run(bool x) {
   return again;
 }
 
-    
