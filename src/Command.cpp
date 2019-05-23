@@ -132,16 +132,20 @@ bool Command::run(bool x) {
             
             if (firstChar == '(')
             {
-                command = command.substr(1,command.size());
-                commandList.push_back(leftParen);
+                while (firstChar == '(')
+                {
+                    command = command.substr(1,command.size());
+                    commandList.push_back(leftParen);
+                    firstChar = command.at(0);
+                }
                 prevConnector = true;
                 leftParenExists = true;
                 commandExists = true;
+                prevCommand = false;
             }
             
             if (lastChar == ')'){
                 rightParenExists = true;
-                command = command.substr(0,command.size()-1);
             }
             
             if (lastChar == ';')
@@ -152,14 +156,24 @@ bool Command::run(bool x) {
                 command = command.substr(0,command.size()-1);
             }
 
-            if (command.size() != 0){
+            string commandCopy = command;
+            if (rightParenExists){
+                char lastCharCopy = commandCopy.at(commandCopy.size()-1);
+
+                while (lastCharCopy == ')'){
+                    commandCopy = commandCopy.substr(0,commandCopy.size()-1);
+                    lastCharCopy = commandCopy.at(commandCopy.size()-1);
+                }
+            }
+
+            if (commandCopy.size() != 0){
                 vector<string> temp;
-                temp.push_back(command);
+                temp.push_back(commandCopy);
                 commandList.push_back(temp);
                 prevCommand = true;
                 prevConnector = false;
-            }
-            
+            }            
+
             if (semiColonExists)
             {
                 commandList.push_back(semiVect);
@@ -170,7 +184,12 @@ bool Command::run(bool x) {
             
             if (rightParenExists)
             {
-                commandList.push_back(rightParen);
+                while (lastChar == ')')
+                {
+                    command = command.substr(0,command.size()-1);
+                    commandList.push_back(rightParen);
+                    lastChar = command.at(command.size()-1);                
+                }
                 prevCommand = false;
                 prevConnector = true;
                 rightParenExists = false;
@@ -184,12 +203,16 @@ bool Command::run(bool x) {
 
             if (firstChar == '(' && prevConnector || firstChar == '(' && commandList.size() == 1)              //For a left parenthesis to be valid the previous node must be a connector
             {
-                command = command.substr(1,command.size());
-                commandList.push_back(leftParen);
-                prevCommand = false;
+                while (firstChar == '(')
+                {
+                    command = command.substr(1,command.size());
+                    commandList.push_back(leftParen);
+                    firstChar = command.at(0);
+                }
+                prevConnector = true;
                 leftParenExists = true;
                 commandExists = true;
-                prevConnector = true;
+                prevCommand = false;
             }
 
             if (lastChar == ';'){
