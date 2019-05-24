@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <stack>
 #include <unistd.h> 
 #include <stdio.h>
 #include <string.h>
@@ -57,6 +58,57 @@ bool printInorder(struct Node* node)
     }
 } 
 
+bool isOperator(string input) { 
+   if (input == "&&" || input == "||" || input == ";") {
+       return true;
+   } 
+    return 0; 
+} 
+
+vector< vector<string> > infixToPostfix(vector< vector<string> > listy){
+    stack < vector<string> > s;
+    vector< vector<string> > postFix;
+
+    for (int i = 0; i < listy.size(); i++){
+        string firstString = listy.at(i).at(0);
+
+        if (firstString != "&&" && firstString != "||" && firstString != ";" && firstString != "(" && firstString != ")" ) {
+            postFix.push_back(listy.at(i));
+        }
+
+        else if (firstString == "&&" || firstString == "||" || firstString == ";") {
+
+            if (s.empty() ) {
+                s.push(listy.at(i) );
+                continue;
+            }
+
+            else if (s.top().at(0) != "(" ) {
+                postFix.push_back(s.top());
+                s.pop();
+            }
+            s.push(listy.at(i));
+        }
+
+        else if (firstString == "(") {
+            s.push(listy.at(i));
+        }
+
+        else if (firstString == ")") {
+             while (s.top().at(0) != "(") {
+                postFix.push_back(s.top());
+                s.pop();
+             }
+             s.pop();
+        }
+    }
+    while (!s.empty()) {
+        postFix.push_back(s.top());
+        s.pop();
+    }
+    
+    return postFix;
+}
 
 
 bool Command::run(bool x) {
@@ -355,7 +407,10 @@ bool Command::run(bool x) {
          commandExists = true;
             
     }
-    
+
+    vector< vector<string> > postfixedCmdList = infixToPostfix(commandList);
+
+
     bool isConnector = false;
     bool firstNode = true;
     Node* root;
@@ -391,7 +446,7 @@ bool Command::run(bool x) {
             else if (isConnector){
                 Node* current = root;
                 Node* next = new Node(current, NULL, NULL, newJuat, true);\
-               // next->setConnecter();
+              // next->setConnecter();
                 current->setParent(next);
                 root = next;
             }
@@ -404,12 +459,15 @@ bool Command::run(bool x) {
         }
     }
     
-    for (int i = 0; i < commandList.size(); i++){
-        for(int j = 0; j < commandList.at(i).size(); j++){
-            cout << commandList.at(i).at(j) << " ";
-        }
-        cout << endl;
-    }
+    // for (int i = 0; i < commandList.size(); i++){
+    //     for(int j = 0; j < commandList.at(i).size(); j++){
+    //         cout << commandList.at(i).at(j) << " ";
+    //     }
+    //     cout << " ";
+    // }
+    // cout << endl;
+    
+    
 
     again = printInorder(root);
 
