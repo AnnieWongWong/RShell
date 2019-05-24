@@ -18,11 +18,13 @@ Command::Command(){
     this->root = NULL;
     this->power = NULL;
 }
+//---------------------------------------------------------------------------
 
 void Command::start_Command_prompt(){
     cout << "$ ";
 }
 
+//--------------------------------------------------------------------------------------
 bool printInorder(struct Node* node) 
 { 
     if (node == NULL) 
@@ -57,13 +59,7 @@ bool printInorder(struct Node* node)
                 if (node->getParent() == NULL) return true;
     }
 } 
-
-bool isOperator(string input) { 
-   if (input == "&&" || input == "||" || input == ";") {
-       return true;
-   } 
-    return 0; 
-} 
+//----------------------------------------------------------------------------------------------------------
 
 vector< vector<string> > infixToPostfix(vector< vector<string> > listy){
     stack < vector<string> > s;
@@ -109,7 +105,112 @@ vector< vector<string> > infixToPostfix(vector< vector<string> > listy){
     
     return postFix;
 }
+//-------------------------------------------------------------------------------------------
+Node* createInfixTree (vector<vector<string> > commandList) {
+    
+    bool isConnector = false;
+    bool firstNode = true;
+    Node* root;
+    Node* last;
+    
+    for (int i = 0; i < commandList.size(); i++){
+        Juat* newJuat;
+        for(int j = 0; j < commandList.at(i).size(); j++){
+            if (commandList.at(i).at(j) == ";"){
+                newJuat = new SemiColon;
+                isConnector = true;
+            }
+            else if (commandList.at(i).at(j) == "&&"){
+                newJuat = new AndStrat;
+                isConnector = true;
+            }
+            else if (commandList.at(i).at(j) == "||"){
+                newJuat = new OrStrat;
+                isConnector = true;
+            }
+            else {
+                newJuat = new Executable(commandList.at(i));
+                isConnector = false;
+            }
+            if (firstNode){
+                  Node* current = new Node(NULL, NULL, NULL, newJuat, true);
+                  current->setRoot();
+                  firstNode = false;
+                  root = current;
+            }
+            else if (isConnector){
+                Node* current = root;
+                Node* next = new Node(current, NULL, NULL, newJuat, true);\
+                current->setParent(next);
+                root = next;
+            }
+            else {
+                Node* current = root;
+                Node* next = new Node(NULL, NULL, current, newJuat, true);
+                current->setright(next);
+            }
+            
+        }
+    }
+    return root;
+}
+//-------------------------------------------------------------------------------------------
+Node* createPostfixTree(vector<vector<string> > listy) {
+    stack <Node*> creator;
+    while (!creator.empty()){
+        creator.pop();
+    }
+    
+    bool isConnector = false;
+    for (int i = 0; i < listy.size(); i++){
+        Juat* newJuat;
+        string firstString = listy.at(i).at(0);
+        
+        if (firstString == ";") {
+            newJuat = new SemiColon;
+            isConnector = true;
+        }
+        else if (firstString == "&&") {
+            newJuat = new AndStrat;
+            isConnector = true;
+        }
+        else if (firstString == "||") {
+            newJuat = new OrStrat;
+            isConnector = true;
+        }
+        else {
+            newJuat = new Executable(listy.at(i));
+            isConnector = false;
+        }
 
+        if (isConnector){
+            Node* next = new Node(NULL, NULL, NULL, newJuat, true);\
+            if (creator.size() < 2){
+                return NULL;
+            }
+            else {
+                next->right = creator.top();
+                creator.pop();
+                next->left = creator.top();
+                creator.pop();
+                creator.push(next);
+            }
+        }
+        else {
+            Node* next = new Node(NULL, NULL, NULL, newJuat, true);
+            creator.push(next);
+        }
+    }
+    
+    Node* root = creator.top();
+    while (!creator.empty()){
+        cout << "Something is wrong" << endl;
+    }
+    
+    return root;
+}
+
+//--------------------------------------------------------------------------------------------
 
 bool Command::run(bool x) {
     bool again = true;
@@ -409,55 +510,7 @@ bool Command::run(bool x) {
     }
 
     vector< vector<string> > postfixedCmdList = infixToPostfix(commandList);
-
-
-    bool isConnector = false;
-    bool firstNode = true;
-    Node* root;
-    Node* last;
-    
-    for (int i = 0; i < commandList.size(); i++){
-        Juat* newJuat;
-        for(int j = 0; j < commandList.at(i).size(); j++){
-            if (commandList.at(i).at(j) == ";"){
-                newJuat = new SemiColon;
-                isConnector = true;
-            }
-            else if (commandList.at(i).at(j) == "&&"){
-                newJuat = new AndStrat;
-                isConnector = true;
-            }
-            else if (commandList.at(i).at(j) == "||"){
-                newJuat = new OrStrat;
-                isConnector = true;
-            }
-            else {
-                newJuat = new Executable(commandList.at(i));
-                isConnector = false;
-            }
-            if (firstNode){
-                //if (!isConnector){
-                  Node* current = new Node(NULL, NULL, NULL, newJuat, true);
-                  current->setRoot();
-                  firstNode = false;
-                  root = current;
-                //}
-            }
-            else if (isConnector){
-                Node* current = root;
-                Node* next = new Node(current, NULL, NULL, newJuat, true);\
-              // next->setConnecter();
-                current->setParent(next);
-                root = next;
-            }
-            else {
-                Node* current = root;
-                Node* next = new Node(NULL, NULL, current, newJuat, true);
-                current->setright(next);
-            }
-            
-        }
-    }
+    Node* root = createPostfixTree(postfixedCmdList);
     
     // for (int i = 0; i < commandList.size(); i++){
     //     for(int j = 0; j < commandList.at(i).size(); j++){
