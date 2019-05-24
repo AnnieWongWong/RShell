@@ -38,13 +38,55 @@ bool printInorder(struct Node* node)
         if (node->j->getstring() == "exit") return false;
         if (node->getParent() != NULL){
             node->getParent()->setBool(node->j->run(true));
+            return true;
         }
         else {
             node->j->run(true);
-                        return true;
+            return true;
         }
     }
     else {
+        if (node->j->run(node->successful())){
+            if(node->getParent() != NULL){
+                if (node->right->j->getstring() == "exit") return false;
+                node->getParent()->setBool(node->right->j->run(true));
+                return true;
+            }
+            else {
+                if (node->right->j->getstring() == "exit") return false;
+                node->right->j->run(true);
+                return true;
+            }
+        }
+                if (node->getParent() == NULL) return true;
+    }
+} 
+
+//---------------------------------------------------------------------------------------------------------
+bool printPostfixTreeInOrder(Node* node) 
+{
+    if (node == NULL) 
+        return true; 
+  
+    /* first recur on left child */
+    printInorder(node->left); 
+  
+    /* then print the data of node */
+    if (node->getIsRoot()){
+        cout << "ISROOT" << endl;
+        if (node->j->getstring() == "exit") return false;
+        if (node->getParent() != NULL){
+            node->getParent()->setBool(node->j->run(true));
+            cout << "here!!!!!!!!!!!!" << endl;
+        }
+        else {
+            cout << "IDUNNO" << endl;
+            node->j->run(true);
+            return true;
+        }
+    }
+    else {
+        cout << "HERE?" << endl;
         if (node->j->run(node->successful())){
             if(node->getParent() != NULL){
                 if (node->right->j->getstring() == "exit") return false;
@@ -53,12 +95,13 @@ bool printInorder(struct Node* node)
             else {
                 if (node->right->j->getstring() == "exit") return false;
                 node->right->j->run(true);
-                                return true;
+                return true;
             }
         }
                 if (node->getParent() == NULL) return true;
     }
-} 
+    
+}
 //----------------------------------------------------------------------------------------------------------
 
 vector< vector<string> > infixToPostfix(vector< vector<string> > listy){
@@ -161,6 +204,7 @@ Node* createPostfixTree(vector<vector<string> > listy) {
         creator.pop();
     }
     
+    bool first = true;
     bool isConnector = false;
     for (int i = 0; i < listy.size(); i++){
         Juat* newJuat;
@@ -194,15 +238,22 @@ Node* createPostfixTree(vector<vector<string> > listy) {
                 next->left = creator.top();
                 creator.pop();
                 creator.push(next);
+                next->left->setParent(next);
+                next->right->setParent(next);
             }
         }
         else {
             Node* next = new Node(NULL, NULL, NULL, newJuat, true);
             creator.push(next);
+            if (first){
+                next->setRoot();
+                first = false;
+            }
         }
     }
     
     Node* root = creator.top();
+    creator.pop();
     while (!creator.empty()){
         cout << "Something is wrong" << endl;
     }
@@ -512,9 +563,9 @@ bool Command::run(bool x) {
     vector< vector<string> > postfixedCmdList = infixToPostfix(commandList);
     Node* root = createPostfixTree(postfixedCmdList);
     
-    // for (int i = 0; i < commandList.size(); i++){
-    //     for(int j = 0; j < commandList.at(i).size(); j++){
-    //         cout << commandList.at(i).at(j) << " ";
+    // for (int i = 0; i < postfixedCmdList.size(); i++){
+    //     for(int j = 0; j < postfixedCmdList.at(i).size(); j++){
+    //         cout << postfixedCmdList.at(i).at(j) << " ";
     //     }
     //     cout << " ";
     // }
