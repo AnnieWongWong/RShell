@@ -1,0 +1,4 @@
+(echo A && echo B) || (echo C && echo D)
+ls && (echo A || echo B) && pwd
+(echo A || (echo B && echo C))
+((echo Iminapickle && echo foodpoisoning) || pwd)
