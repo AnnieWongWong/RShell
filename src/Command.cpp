@@ -271,14 +271,30 @@ bool Command::run(bool x) {
 
     this->start_Command_prompt();
     getline(cin,userCommand);
-
-
+    
     string exitt = userCommand.substr(0,4);
     if (exitt == "exit"){
             return false;
     }
     
     userCommand = userCommand.substr(0, userCommand.find(" #"));
+    
+    if (userCommand.empty() || userCommand.at(0) == '#'){
+        return true;
+    }
+
+    int numQuotes = 0;
+    for (int i = 0; i < userCommand.size(); ++i)
+    {
+        if (userCommand.at(i) == '"')
+            numQuotes++;
+    }
+
+    if (numQuotes % 2 != 0)
+    {
+        cout << "Error: uneven number of quotations" << endl;
+        return true;
+    }
 
     int numLeftParen = 0;
     int numRightParen = 0;
@@ -296,7 +312,7 @@ bool Command::run(bool x) {
 
     if (numLeftParen != numRightParen)
     {
-        cout << "Error: missing or extra parenthesis" << endl;
+        cout << "Error: uneven number of parenthesis" << endl;
         return true;
     }
     
@@ -313,6 +329,8 @@ bool Command::run(bool x) {
     bool doubleConnector = false;
     bool prevRightParen = false;
     bool prevCommand = false;
+    bool leftQuotationExists = false;
+
     
     vector<string> andVect(1, "&&");
     vector<string> orVect(1, "||");
@@ -404,68 +422,93 @@ bool Command::run(bool x) {
         
         else 
         {
-
-            if (firstChar == '(' && prevConnector || firstChar == '(' && commandList.size() == 1)              //For a left parenthesis to be valid the previous node must be a connector
+            if (!leftQuotationExists)
             {
-                while (firstChar == '(')
+
+                if (firstChar == '(' && prevConnector || firstChar == '(' && commandList.size() == 1)              //For a left parenthesis to be valid the previous node must be a connector
                 {
-                    command = command.substr(1,command.size());
-                    commandList.push_back(leftParen);
-                    firstChar = command.at(0);
-                }
-                prevConnector = true;
-                leftParenExists = true;
-                commandExists = true;
-                prevCommand = false;
-            }
-
-            if (lastChar == ';'){
-                if (prevConnector && command.size() == 1 && !leftParenExists && (prevRightParen && prevConnector)){         //a connector cannot follow another connector
-                    doubleConnector = true;
-                } 
-                else {
-                    command = command.substr(0,command.size()-1);
-                    semiColonExists = true;
+                    while (firstChar == '(')
+                    {
+                        command = command.substr(1,command.size());
+                        commandList.push_back(leftParen);
+                        firstChar = command.at(0);
+                    }
+                    prevConnector = true;
+                    leftParenExists = true;
                     commandExists = true;
-                }
-            }
-            else if(command == "&&"){
-                if (prevConnector && !leftParenExists  && (prevRightParen && prevConnector)){                                  //a connector cannot follow another connector
-                    doubleConnector = true;
-                }
-                else {
-                    commandList.push_back(andVect);
-                    prevConnector = true;
-                    commandExists = false;
                     prevCommand = false;
                 }
-            }
-            else if(command == "||"){
-                if (prevConnector && !leftParenExists && (prevRightParen && prevConnector)){                                     //a connector cannot follow another connector
-                    doubleConnector = true;
-                }         
-                else {
-                    commandList.push_back(orVect);
-                    prevConnector = true;
-                    commandExists = false;        
-                    prevCommand = false;
-                }      
+
+                if (lastChar == ';'){
+                    if (prevConnector && command.size() == 1 && !leftParenExists && (prevRightParen && prevConnector)){         //a connector cannot follow another connector
+                        doubleConnector = true;
+                    } 
+                    else {
+                        command = command.substr(0,command.size()-1);
+                        semiColonExists = true;
+                        commandExists = true;
+                    }
+                }
+                else if(command == "&&"){
+                    if (prevConnector && !leftParenExists  && (prevRightParen && prevConnector)){                                  //a connector cannot follow another connector
+                        doubleConnector = true;
+                    }
+                    else {
+                        commandList.push_back(andVect);
+                        prevConnector = true;
+                        commandExists = false;
+                        prevCommand = false;
+                    }
+                }
+                else if(command == "||"){
+                    if (prevConnector && !leftParenExists && (prevRightParen && prevConnector)){                                     //a connector cannot follow another connector
+                        doubleConnector = true;
+                    }         
+                    else {
+                        commandList.push_back(orVect);
+                        prevConnector = true;
+                        commandExists = false;        
+                        prevCommand = false;
+                    }      
+                }
+
+                if (doubleConnector)
+                {
+                    cout << "-bash: syntax error near unexpected token '" << command << "'" << endl;
+                    doubleConnector = false;
+                    return true;               
+                }
             }
 
-            if (doubleConnector)
-            {
-                cout << "-bash: syntax error near unexpected token r u here '" << command << "'" << endl;
-                doubleConnector = false;
-                return true;               
-            }
-            
-            if (commandExists && prevConnector){
+            if (!leftQuotationExists && commandExists && prevConnector){
                 if (lastChar == ')') {            //For a right parenthesis to be valid the previous node cannot be a connector
                     rightParenExists = true;  
                     leftParenExists = false;
                 }
 
-                
+                while (firstChar == '"') {
+                    command = command.substr(1,command.size());
+                    firstChar = command.at(0);
+                    lastChar = command.at(command.size()-1);
+                    if (!leftQuotationExists) {
+                        leftQuotationExists = true;
+                    }
+                    else {
+                        leftQuotationExists = false;
+                    }
+                }
+
+                while (lastChar == '"'){
+                    command = command.substr(0,command.size()-1);
+                    lastChar = command.at(command.size()-1);     
+                    if (!leftQuotationExists) {
+                        leftQuotationExists = true;
+                    }
+                    else {
+                        leftQuotationExists = false;
+                    }                                   
+                }         
+
                 string commandCopy = command;
                 if (rightParenExists){
                     char lastCharCopy = commandCopy.at(commandCopy.size()-1);
@@ -508,11 +551,35 @@ bool Command::run(bool x) {
                 }
             }
             
-            else if(prevCommand || commandExists && !prevConnector || commandExists && rightParenExists || commandExists && leftParenExists)
+            else if(leftQuotationExists || prevCommand || commandExists && !prevConnector || commandExists && rightParenExists || commandExists && leftParenExists)
             {
                 if (lastChar == ')') {          
                     rightParenExists = true;  
                 }
+
+                
+                while (firstChar == '"') {
+                    command = command.substr(1,command.size());
+                    firstChar = command.at(0);
+                    lastChar = command.at(command.size()-1);
+                    if (!leftQuotationExists) {
+                        leftQuotationExists = true;
+                    }
+                    else {
+                        leftQuotationExists = false;
+                    }
+                }
+
+                while (lastChar == '"'){
+                    command = command.substr(0,command.size()-1);
+                    lastChar = command.at(command.size()-1);     
+                    if (!leftQuotationExists) {
+                        leftQuotationExists = true;
+                    }
+                    else {
+                        leftQuotationExists = false;
+                    }                                   
+                }  
 
                 string commandCopy = command;
                 if (rightParenExists){
@@ -567,7 +634,7 @@ bool Command::run(bool x) {
     //     for(int j = 0; j < postfixedCmdList.at(i).size(); j++){
     //         cout << postfixedCmdList.at(i).at(j) << " ";
     //     }
-    //     cout << " ";
+    //     cout << endl;
     // }
     // cout << endl;
     
@@ -579,4 +646,3 @@ bool Command::run(bool x) {
         
   return again;
 }
-
