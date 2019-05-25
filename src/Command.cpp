@@ -34,8 +34,9 @@ bool printInorder(struct Node* node)
     printInorder(node->left); 
   
     /* then print the data of node */
+    if (node->j->getstring() == "exit") return false;
+    
     if (node->getIsRoot()){
-        if (node->j->getstring() == "exit") return false;
         if (node->getParent() != NULL){
             node->getParent()->setBool(node->j->run(true));
             return true;
@@ -46,19 +47,30 @@ bool printInorder(struct Node* node)
         }
     }
     else {
-        if (node->j->run(node->successful())){
-            if(node->getParent() != NULL){
-                if (node->right->j->getstring() == "exit") return false;
-                node->getParent()->setBool(node->right->j->run(true));
+        if (node->getIsConnector() && node->j->run(node->successful() ) ) 
+        {
+            if (node->right->j->getstring() == "exit") 
+                return false;
+            
+            printInorder(node->right);
+        }
+        
+        else if (!node->getIsConnector())
+        {
+            if(node->getParent() != NULL)
+            {
+                node->getParent()->setBool(node->j->run(true));
                 return true;
             }
-            else {
-                if (node->right->j->getstring() == "exit") return false;
-                node->right->j->run(true);
+            else 
+            {
+                node->j->run(true);
                 return true;
             }
         }
-                if (node->getParent() == NULL) return true;
+            
+        if (node->getParent() == NULL) 
+            return true;
     }
 } 
 
@@ -228,7 +240,8 @@ Node* createPostfixTree(vector<vector<string> > listy) {
         }
 
         if (isConnector){
-            Node* next = new Node(NULL, NULL, NULL, newJuat, true);\
+            Node* next = new Node(NULL, NULL, NULL, newJuat, true);
+            next->setConnector(true);
             if (creator.size() < 2){
                 return NULL;
             }
@@ -244,6 +257,7 @@ Node* createPostfixTree(vector<vector<string> > listy) {
         }
         else {
             Node* next = new Node(NULL, NULL, NULL, newJuat, true);
+            next->setConnector(false);
             creator.push(next);
             if (first){
                 next->setRoot();

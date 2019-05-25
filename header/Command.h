@@ -25,7 +25,7 @@ public:
    void setRoot(){isRoot = true;}
    bool getIsRoot(){return isRoot;}
    bool getIsConnector(){return isConnecter;}
-   void setConnector(){isConnecter = true;}
+   void setConnector(bool yes){isConnecter = yes;}
    bool evaluate(){
       return j->run(success);
    }
