@@ -291,7 +291,24 @@ bool Command::run(bool x) {
             return false;
     }
     
+    
+    string originalCommand = userCommand;
+    int numBefore = originalCommand.size();
     userCommand = userCommand.substr(0, userCommand.find(" #"));
+    int numAfter = userCommand.size();
+    
+    
+    if (numBefore > numAfter) {
+        int numQuotes= 0;
+        for (int i = 0; i < numAfter; i++){
+            if (originalCommand.at(i) == '"'){
+                numQuotes++;
+            }
+        }
+        if (numQuotes % 2 == 1){
+            userCommand = originalCommand;
+        }
+    }
     
     if (userCommand.empty() || userCommand.at(0) == '#'){
         return true;
