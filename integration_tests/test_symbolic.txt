@@ -1,3 +1,4 @@
-[ -e test/file/path ] && echo “path exists”
-[ -d src/ ] && echo "path exists"
-[ -f tests/ ] || echo "path does not exist"
+[ -e ../src ] && echo "path exists"
+[ -d ../src/ ] && echo "path exists"
+[ -f ../rshll ] || echo "path does not exist"
+exit

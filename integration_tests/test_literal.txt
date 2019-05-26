@@ -1,3 +1,5 @@
-test -e test/file/path && echo “path exists”
-test -d src && echo "path exists"
-test -f main.cpp && echo "path exists"
+test -e ../src && echo "path exists"
+test -d ../src && echo "path exists"
+test -f ../main.cpp && echo "path exists"
+test -f ../main.pp || echo "path does not exists"
+exit
