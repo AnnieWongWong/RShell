@@ -106,7 +106,7 @@ bool Executable::run(bool x){
 			perror("wait");
 		}
 		if (WIFEXITED(status)){
-      if (exec.at(0) == "ls" && exec.at(1).at(1) == 'j')
+      if (exec.size() != 1 && exec.at(0) == "ls" && exec.at(1).at(1) == 'j')
          return false;
 			if (WEXITSTATUS(status) == 1){
 				return false;
