@@ -28,7 +28,10 @@ bool test_Exec(vector<string> yea){
         return false;
       }
     }
-    else return false;
+    else{
+      cout << "(False)\n"; 
+      return false;
+    }
   }
   else if(flag == "-d"){
   string dir_path = yea.at(2);
@@ -42,7 +45,10 @@ bool test_Exec(vector<string> yea){
         return false;
       }
     }
-    else return false;
+    else{
+      cout << "(False)\n"; 
+      return false;
+    }
   }
   else if(flag == "-e"){
   string path = yea.at(2);
