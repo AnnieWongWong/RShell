@@ -501,9 +501,18 @@ bool Command::run(bool x) {
                 }
 
                 while (firstChar == '"') {
-                    command = command.substr(1,command.size());
-                    firstChar = command.at(0);
-                    lastChar = command.at(command.size()-1);
+                    if (command.size() > 1){
+                        command = command.substr(1,command.size());
+                    }
+                    else if (command.size() == 1){
+                        command = "";
+                        firstChar = '0';
+                        lastChar = '0';
+                    }
+                    if(command.size() !=  0) {
+                            firstChar = command.at(0);
+                            lastChar = command.at(command.size()-1);                     
+                    }
                     if (!leftQuotationExists) {
                         leftQuotationExists = true;
                     }
@@ -513,8 +522,17 @@ bool Command::run(bool x) {
                 }
 
                 while (lastChar == '"'){
-                    command = command.substr(0,command.size()-1);
-                    lastChar = command.at(command.size()-1);     
+                    if (command.size() > 1){
+                        command = command.substr(0,command.size()-1);
+                    }
+                    else if (command.size() == 1){
+                        command = "";
+                        firstChar = '0';
+                        lastChar = '0';
+                    }
+                    if(command.size() !=  0) {
+                        lastChar = command.at(command.size()-1);
+                    }
                     if (!leftQuotationExists) {
                         leftQuotationExists = true;
                     }
@@ -573,9 +591,18 @@ bool Command::run(bool x) {
 
                 
                 while (firstChar == '"') {
-                    command = command.substr(1,command.size());
-                    firstChar = command.at(0);
-                    lastChar = command.at(command.size()-1);
+                    if (command.size() > 1){
+                        command = command.substr(1,command.size());
+                    }
+                    else if (command.size() == 1){
+                        command = "";
+                        firstChar = '0';
+                        lastChar = '0';
+                    }
+                    if(command.size() !=  0) {
+                        firstChar = command.at(0);
+                        lastChar = command.at(command.size()-1);
+                    }
                     if (!leftQuotationExists) {
                         leftQuotationExists = true;
                     }
@@ -585,13 +612,22 @@ bool Command::run(bool x) {
                 }
 
                 while (lastChar == '"'){
-                    command = command.substr(0,command.size()-1);
-                    lastChar = command.at(command.size()-1);     
-                    if (!leftQuotationExists) {
-                        leftQuotationExists = true;
+                    if (command.size() > 1){
+                        command = command.substr(0,command.size()-1);
+                    }
+                    else if (command.size() == 1){
+                        command = "";
+                        firstChar = '0';
+                        lastChar = '0';
+                    }
+                    if(command.size() !=  0) {
+                        lastChar = command.at(command.size()-1); 
+                    }
+                    if (leftQuotationExists) {
+                        leftQuotationExists = false;
                     }
                     else {
-                        leftQuotationExists = false;
+                        leftQuotationExists = true;
                     }                                   
                 }  
 
