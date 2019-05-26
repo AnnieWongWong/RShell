@@ -60,7 +60,7 @@ TEST(Executable, multipleLine) {
    EXPECT_EQ(exec.getstring(),"pwd");
 }
 
-TEST(Executable_Test_Function, fileExists1) {
+TEST(Executable_Test_Function, Exists1) {
     vector<string> commandLine;
 		commandLine.push_back("test");
 		commandLine.push_back("main.cpp");
@@ -69,7 +69,7 @@ TEST(Executable_Test_Function, fileExists1) {
    EXPECT_EQ(exec.run(true),true);
 }
 
-TEST(Executable_Test_Function, fileExists2) {
+TEST(Executable_Test_Function, Exists2) {
     vector<string> commandLine;
     commandLine.push_back("test");
     commandLine.push_back("-e");
@@ -79,7 +79,7 @@ TEST(Executable_Test_Function, fileExists2) {
    EXPECT_EQ(exec.run(true),true);
 }
 
-TEST(Executable_Test_Function, fileExists3) {
+TEST(Executable_Test_Function, Exists3) {
     vector<string> commandLine;
     commandLine.push_back("test");
     commandLine.push_back("-e");
@@ -89,10 +89,68 @@ TEST(Executable_Test_Function, fileExists3) {
    EXPECT_EQ(exec.run(true),true);
 }
 
-TEST(Executable_Test_Function, DirectoryExists1) {
+TEST(Executable_Test_Function, Exists4) {
+    vector<string> commandLine;
+		commandLine.push_back("test");
+		commandLine.push_back("santa.cpp");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),false);
+}
+
+TEST(Executable_Test_Function, Exists5) {
     vector<string> commandLine;
     commandLine.push_back("test");
     commandLine.push_back("-e");
+		commandLine.push_back("src/clause.cpp");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),false);
+}
+
+TEST(Executable_Test_Function, FileExists1) {
+    vector<string> commandLine;
+    commandLine.push_back("test");
+    commandLine.push_back("-f");
+		commandLine.push_back("main.cpp");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),true);
+}
+
+TEST(Executable_Test_Function, FileExists2) {
+    vector<string> commandLine;
+    commandLine.push_back("test");
+    commandLine.push_back("-f");
+		commandLine.push_back("src/Executable.cpp");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),true);
+}
+
+TEST(Executable_Test_Function, FileExists3) {
+    vector<string> commandLine;
+		commandLine.push_back("test");
+    commandLine.push_back("-f");
+		commandLine.push_back("TrueFreedom.cpp");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),false);
+}
+
+TEST(Executable_Test_Function, FileExists4) {
+    vector<string> commandLine;
+    commandLine.push_back("test");
+    commandLine.push_back("-f");
+		commandLine.push_back("header/TrumpsNoggin.cpp");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),false);
+}
+
+TEST(Executable_Test_Function, DirectoryExists1) {
+    vector<string> commandLine;
+    commandLine.push_back("test");
 		commandLine.push_back("src");
    	Executable exec(commandLine);
   
@@ -102,12 +160,23 @@ TEST(Executable_Test_Function, DirectoryExists1) {
 TEST(Executable_Test_Function, DirectoryExists2) {
     vector<string> commandLine;
     commandLine.push_back("test");
-    commandLine.push_back("-e");
+    commandLine.push_back("-d");
 		commandLine.push_back("header");
    	Executable exec(commandLine);
   
    EXPECT_EQ(exec.run(true),true);
 }
+
+TEST(Executable_Test_Function, DirectoryExists3) {
+    vector<string> commandLine;
+    commandLine.push_back("test");
+    commandLine.push_back("-d");
+		commandLine.push_back("unicorns");
+   	Executable exec(commandLine);
+  
+   EXPECT_EQ(exec.run(true),false);
+}
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
