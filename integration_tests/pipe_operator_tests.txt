@@ -1,0 +1,9 @@
+cat < ../some | tr A-Z a-z | tee newOutputFile1 | tr a-z A-Z > newOutputFile2
+ls | tac
+ls -l | tee file.txt | less
+cat ../some | tr a-z A-Z
+ls -l | more
+sort ../some | uniq
+cat ../some | grep "A" 
+ls -a | grep src
+exit

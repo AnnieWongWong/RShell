@@ -1,0 +1,6 @@
+cat < ../some | tr A-Z a-z | tee newOutputFile1 | tr a-z A-Z > newOutputFile2
+who > users.txt
+ls -a > files.txt
+cat ../some > some.txt
+echo Hello World > hello.txt
+cat README.md | grep Author >> hello.txt

@@ -73,6 +73,19 @@ bool test_Exec(vector<string> yea){
   }
 }
 
+
+bool test_Pipe_N_Redirection(vector<string> cmdd){
+  
+  for (int i = 0; i < cmdd.size(); ++i)
+  {
+    if (cmdd.at(i) == "<" || cmdd.at(i) == ">" || cmdd.at(i) == ">>" || cmdd.at(i) == "|")
+    {
+      return true;
+    }
+  }   
+  return false; 
+}
+
 bool Executable::run(bool x){
 
   bool a_gain = false;

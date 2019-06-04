@@ -1,0 +1,7 @@
+wc -l < ../some
+wc -l << ../some
+cat < ../some
+cat < README.md > rdme.md
+cat < README.md | tr a-z A-Z
+grep Author < README.md
+exit
