@@ -403,6 +403,68 @@ bool in_append_redirection(vector<string> leftCmd, vector<string> midCmd, vector
   
 }
 
+bool pipe(vector<string> leftCmd, vector<string> rightCmd) {
+  int status = 0;
+  int sewer[2];
+  pid_t pid = fork();
+  pipe(sewer);
+  int origSTDIN = dup(0);
+  int origSTDOUT = dup(1);
+  char* argsL[leftCmd.size()+1];
+  char* argsR[rightCmd.size()+1];
+  
+  for (int i = 0; i < leftCmd.size(); i++){
+        argsL[i] = (char*)leftCmd.at(i).c_str();
+    }
+  for (int i = 0; i < rightCmd.size(); i++){
+        argsR[i] = (char*)rightCmd.at(i).c_str();
+    }
+  argsL[leftCmd.size()] = NULL;
+  argsR[rightCmd.size()] = NULL;
+  
+  if(pid == -1){
+    perror("Error");
+    status = 1;
+    _exit(status);
+  }
+  
+  if(!pid){
+    dup2(sewer[0], 0);
+    dup2(origSTDOUT, 1);
+    
+    close(origSTDOUT);    
+    close(origSTDIN);
+    close(sewer[0]);
+    close(sewer[1]);
+    
+    if (execvp(argsL[0], argsL) == -1){
+      perror("Error");
+      status = 1;
+      _exit(status);
+    }
+  }
+  
+  dup2(sewer[1],1);
+
+  close(sewer[0]);
+  close(sewer[1]);  
+  close(origSTDOUT);
+  close(origSTDIN);
+
+
+  
+  if (execvp(argsR[0], argsR) == -1){
+      perror("Error");
+      _exit(1);
+    }  
+    
+  pid_t wpid = waitpid(pid, &status, 0);
+    
+  return wpid == pid && WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+}
+
+
+
 //===============================================================================
 bool Executable::run(bool x){
 
@@ -503,6 +565,24 @@ bool Executable::run(bool x){
             
             return append_redirection(leftCmd, rightCmd); 
           }
+          else if (exec.at(i) == "|") {
+            vector<string> leftCmd;
+            vector<string> rightCmd;
+
+            int j = i - 1;
+            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+              leftCmd.insert(leftCmd.begin(), exec.at(j) );
+              j--;
+            }
+
+            j = i + 1;
+            while (j < exec.size() && !is_Symbol(exec.at(j) ) ) {
+              rightCmd.push_back(exec.at(j) );
+              j++;
+            }
+            
+            return pipe(leftCmd, rightCmd); 
+          }
       }
 
   }
@@ -542,9 +622,9 @@ bool Executable::run(bool x){
       }
     }
 
-  }
+    }
 
-}
+  }
 
   
 
