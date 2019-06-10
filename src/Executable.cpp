@@ -265,6 +265,14 @@ bool is_Symbol(string x) {
     return false;
   }
 }
+bool is_Symbol1(string x) {
+  if (x == "|") {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
 
 //===============================================================================
 bool in_out_redirection(vector<string> leftCmd, vector<string> midCmd, vector<string> rightCmd) {
@@ -453,7 +461,7 @@ bool pipe(vector<string> leftCmd, vector<string> rightCmd) {
   if ( (pipe_out = popen(argsRi, "w") ) == NULL) {
   	perror("ERROR");
   	return false;
-  }
+  } 
 
   while(fgets(readingbuffer, 1000, pipe_in)) {
   	fputs(readingbuffer, pipe_out);
@@ -496,6 +504,7 @@ bool Executable::run(bool x){
   int status = 0;
   char* args[exec.size()+1];
   bool runnin_runnin;
+  bool firstLHS = true;
   if (test_Pipe_N_Redirection(exec)) {
       int j = 0;
       int k = -1;
@@ -512,7 +521,7 @@ bool Executable::run(bool x){
             midCmd.push_back(exec.at(2));
             rightCmd.push_back(exec.at(4));
             
-            return in_append_redirection(leftCmd, midCmd, rightCmd);
+            runnin_runnin = in_append_redirection(leftCmd, midCmd, rightCmd);
           }
           
           // < > case
@@ -525,7 +534,7 @@ bool Executable::run(bool x){
             midCmd.push_back(exec.at(2));
             rightCmd.push_back(exec.at(4));
             
-            return in_out_redirection(leftCmd, midCmd, rightCmd);
+            runnin_runnin = in_out_redirection(leftCmd, midCmd, rightCmd);
           }
           
           
@@ -545,7 +554,7 @@ bool Executable::run(bool x){
               rightCmd.push_back(exec.at(j) );
               j++;
             }
-            return input_redirection(leftCmd, rightCmd);
+            runnin_runnin = input_redirection(leftCmd, rightCmd);
             k = i;
           }
 
@@ -565,7 +574,7 @@ bool Executable::run(bool x){
               rightCmd.push_back(exec.at(j) );
               j++;
             }
-            return output_redirection(leftCmd, rightCmd); 
+            runnin_runnin = output_redirection(leftCmd, rightCmd); 
             k = i;
           }
           
@@ -587,7 +596,7 @@ bool Executable::run(bool x){
               j++;
             }
             
-            return append_redirection(leftCmd, rightCmd); 
+            runnin_runnin = append_redirection(leftCmd, rightCmd); 
             k = i;
           }
           else if (exec.at(i) == "|") {
@@ -595,18 +604,35 @@ bool Executable::run(bool x){
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > k && !is_Symbol(exec.at(j) ) ) {
+            
+            if(firstLHS){
+            while (j > -1 && !is_Symbol1(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
 
             j = i + 1;
-            while (j < exec.size() && !is_Symbol(exec.at(j) ) ) {
+            while (j < exec.size() && !is_Symbol1(exec.at(j) ) ) {
+              rightCmd.push_back(exec.at(j) );
+              j++;
+              firstLHS = false;
+            }
+            }
+            
+            else{
+            while (j > k) {
+              leftCmd.insert(leftCmd.begin(), exec.at(j) );
+              j--;
+            }
+
+            j = i + 1;
+            while (j < exec.size() && !is_Symbol1(exec.at(j) ) ) {
               rightCmd.push_back(exec.at(j) );
               j++;
             }
+            }
             
-            return pipe(leftCmd, rightCmd); 
+            runnin_runnin = pipe(leftCmd, rightCmd); 
             k = i;
           }
       }
