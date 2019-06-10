@@ -289,7 +289,7 @@ bool in_out_redirection(vector<string> leftCmd, vector<string> midCmd, vector<st
     argsleft[i] = (char*)leftCmd.at(i).c_str();
   }
  argsleft[leftCmd.size()] = NULL;
-  
+
   int newFilein = dup(0);       //save stdin to newFile
   close(0);                   //close stdin
   dup(readin);                // set readin to stdin
@@ -402,62 +402,83 @@ bool in_append_redirection(vector<string> leftCmd, vector<string> midCmd, vector
   return true;
   
 }
-
+//===================================================================================
 bool pipe(vector<string> leftCmd, vector<string> rightCmd) {
   int status = 0;
   int sewer[2];
   pid_t pid = fork();
   pipe(sewer);
+  
+  if (pid == 0) {
   int origSTDIN = dup(0);
   int origSTDOUT = dup(1);
   char* argsL[leftCmd.size()+1];
   char* argsR[rightCmd.size()+1];
   
-  for (int i = 0; i < leftCmd.size(); i++){
-        argsL[i] = (char*)leftCmd.at(i).c_str();
-    }
-  for (int i = 0; i < rightCmd.size(); i++){
-        argsR[i] = (char*)rightCmd.at(i).c_str();
-    }
-  argsL[leftCmd.size()] = NULL;
-  argsR[rightCmd.size()] = NULL;
+  string leftCmdd = leftCmd.at(0);
   
-  if(pid == -1){
-    perror("Error");
-    status = 1;
-    _exit(status);
+  for (int i = 1; i < leftCmd.size(); i++){
+    leftCmdd = leftCmdd + " " + leftCmd.at(i);
+  }
+    
+  const char* argsLe = leftCmdd.c_str();
+
+  string rightCmdd = rightCmd.at(0);
+  
+  for (int i = 1; i < rightCmd.size(); i++){
+    rightCmdd = rightCmdd + " " + rightCmd.at(i);
+  }
+
+  const char* argsRi = rightCmdd.c_str();
+  
+  // for (int i = 0; i < leftCmd.size(); i++){
+  //       argsL[i] = (char*)leftCmd.at(i).c_str();
+  //   }
+  // for (int i = 0; i < rightCmd.size(); i++){
+  //       argsR[i] = (char*)rightCmd.at(i).c_str();
+  //   }
+  // argsL[leftCmd.size()] = NULL;
+  // argsR[rightCmd.size()] = NULL;
+
+  
+  FILE *pipe_in;
+  FILE *pipe_out;
+  char readingbuffer[1000];
+
+  if ( (pipe_in = popen(argsLe, "r") ) == NULL) {
+  	perror("ERROR");
+  	return false;
+  }
+
+  if ( (pipe_out = popen(argsRi, "w") ) == NULL) {
+  	perror("ERROR");
+  	return false;
+  }
+
+  while(fgets(readingbuffer, 1000, pipe_in)) {
+  	fputs(readingbuffer, pipe_out);
   }
   
-  if(!pid){
-    dup2(sewer[0], 0);
-    dup2(origSTDOUT, 1);
-    
-    close(origSTDOUT);    
-    close(origSTDIN);
-    close(sewer[0]);
-    close(sewer[1]);
-    
-    if (execvp(argsR[0], argsR) == -1){
-      perror("Error");
-      status = 1;
-      _exit(status);
-    }
+  pclose(pipe_in);
+  pclose(pipe_out);
+  
   }
   
-  dup2(sewer[1],1);
+  if (pid > 0) {
+    //parent
+    if (waitpid(0,&status,0) == -1){
+      perror("wait");
+    }
+    if (WIFEXITED(status)){
+      if (WEXITSTATUS(status) == 1){
+        return false;
+      }
+      else{
+        return true;
+      }
+    }
+  }
 
-  close(sewer[0]);
-  close(sewer[1]);  
-  close(origSTDOUT);
-  close(origSTDIN);
-
-
-  
-  if (execvp(argsL[0], argsL) == -1){
-      perror("Error");
-      _exit(1);
-    }  
-    
   return true;
 }
 
@@ -474,8 +495,10 @@ bool Executable::run(bool x){
 
   int status = 0;
   char* args[exec.size()+1];
+  bool runnin_runnin;
   if (test_Pipe_N_Redirection(exec)) {
       int j = 0;
+      int k = -1;
 
       for (int i = 0; i < exec.size(); i++ ) {
           
@@ -512,7 +535,7 @@ bool Executable::run(bool x){
             vector<string> rightCmd;
 
             j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -523,6 +546,7 @@ bool Executable::run(bool x){
               j++;
             }
             return input_redirection(leftCmd, rightCmd);
+            k = i;
           }
 
           // > case
@@ -531,7 +555,7 @@ bool Executable::run(bool x){
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -542,6 +566,7 @@ bool Executable::run(bool x){
               j++;
             }
             return output_redirection(leftCmd, rightCmd); 
+            k = i;
           }
           
           
@@ -551,7 +576,7 @@ bool Executable::run(bool x){
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -563,13 +588,14 @@ bool Executable::run(bool x){
             }
             
             return append_redirection(leftCmd, rightCmd); 
+            k = i;
           }
           else if (exec.at(i) == "|") {
             vector<string> leftCmd;
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -581,6 +607,7 @@ bool Executable::run(bool x){
             }
             
             return pipe(leftCmd, rightCmd); 
+            k = i;
           }
       }
 
