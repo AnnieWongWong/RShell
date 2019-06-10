@@ -437,7 +437,7 @@ bool pipe(vector<string> leftCmd, vector<string> rightCmd) {
     close(sewer[0]);
     close(sewer[1]);
     
-    if (execvp(argsL[0], argsL) == -1){
+    if (execvp(argsR[0], argsR) == -1){
       perror("Error");
       status = 1;
       _exit(status);
@@ -453,14 +453,12 @@ bool pipe(vector<string> leftCmd, vector<string> rightCmd) {
 
 
   
-  if (execvp(argsR[0], argsR) == -1){
+  if (execvp(argsL[0], argsL) == -1){
       perror("Error");
       _exit(1);
     }  
     
-  pid_t wpid = waitpid(pid, &status, 0);
-    
-  return wpid == pid && WIFEXITED(status) ? WEXITSTATUS(status) : -1;
+  return true;
 }
 
 
@@ -476,7 +474,10 @@ bool Executable::run(bool x){
 
   int status = 0;
   char* args[exec.size()+1];
+  bool runnin_runnin;
   if (test_Pipe_N_Redirection(exec)) {
+      int j = 0;
+      int k = -1;
 
       for (int i = 0; i < exec.size(); i++ ) {
           
@@ -490,7 +491,7 @@ bool Executable::run(bool x){
             midCmd.push_back(exec.at(2));
             rightCmd.push_back(exec.at(4));
             
-            return in_append_redirection(leftCmd, midCmd, rightCmd);
+            runnin_runnin = in_append_redirection(leftCmd, midCmd, rightCmd);
           }
           
           // < > case
@@ -503,7 +504,7 @@ bool Executable::run(bool x){
             midCmd.push_back(exec.at(2));
             rightCmd.push_back(exec.at(4));
             
-            return in_out_redirection(leftCmd, midCmd, rightCmd);
+            runnin_runnin = in_out_redirection(leftCmd, midCmd, rightCmd);
           }
           
           
@@ -512,8 +513,8 @@ bool Executable::run(bool x){
             vector<string> leftCmd;
             vector<string> rightCmd;
 
-            int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            j = i - 1;
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -523,7 +524,8 @@ bool Executable::run(bool x){
               rightCmd.push_back(exec.at(j) );
               j++;
             }
-            return input_redirection(leftCmd, rightCmd);
+            runnin_runnin = input_redirection(leftCmd, rightCmd);
+            k = i;
           }
 
           // > case
@@ -532,7 +534,7 @@ bool Executable::run(bool x){
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -542,7 +544,8 @@ bool Executable::run(bool x){
               rightCmd.push_back(exec.at(j) );
               j++;
             }
-            return output_redirection(leftCmd, rightCmd); 
+            runnin_runnin = output_redirection(leftCmd, rightCmd); 
+            k = i;
           }
           
           
@@ -552,7 +555,7 @@ bool Executable::run(bool x){
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -563,14 +566,15 @@ bool Executable::run(bool x){
               j++;
             }
             
-            return append_redirection(leftCmd, rightCmd); 
+            runnin_runnin = append_redirection(leftCmd, rightCmd); 
+            k = i;
           }
           else if (exec.at(i) == "|") {
             vector<string> leftCmd;
             vector<string> rightCmd;
 
             int j = i - 1;
-            while (j > -1 && !is_Symbol(exec.at(j) ) ) {
+            while (j > k && !is_Symbol(exec.at(j) ) ) {
               leftCmd.insert(leftCmd.begin(), exec.at(j) );
               j--;
             }
@@ -581,7 +585,8 @@ bool Executable::run(bool x){
               j++;
             }
             
-            return pipe(leftCmd, rightCmd); 
+            runnin_runnin = pipe(leftCmd, rightCmd); 
+            k = i;
           }
       }
 
