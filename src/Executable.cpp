@@ -508,9 +508,16 @@ bool Executable::run(bool x){
   if (test_Pipe_N_Redirection(exec)) {
       int j = 0;
       int k = -1;
-
+      int num_pipes = 0;
+      vector<string> leftCmd;
+      vector<string> rightCmd;
+      
       for (int i = 0; i < exec.size(); i++ ) {
-          
+        if(is_Symbol1(exec.at(i))) num_pipes++;
+      }
+      
+      if(num_pipes == 0){
+        for (int i = 0; i < exec.size(); i++ ) {
           //< >> case
           if (exec.size() >= 5 && exec.at(1) == "<" && exec.at(3) == ">>") {
             vector<string> leftCmd;
@@ -523,8 +530,7 @@ bool Executable::run(bool x){
             
             runnin_runnin = in_append_redirection(leftCmd, midCmd, rightCmd);
           }
-          
-          // < > case
+          //< > case
           if (exec.size() >= 5 && exec.at(1) == "<" && exec.at(3) == ">") {
             vector<string> leftCmd;
             vector<string> rightCmd;
@@ -536,7 +542,6 @@ bool Executable::run(bool x){
             
             runnin_runnin = in_out_redirection(leftCmd, midCmd, rightCmd);
           }
-          
           
           // < case
           if (exec.at(i) == "<") {
@@ -557,7 +562,6 @@ bool Executable::run(bool x){
             runnin_runnin = input_redirection(leftCmd, rightCmd);
             k = i;
           }
-
           // > case
           else if (exec.at(i) == ">") {
             vector<string> leftCmd;
@@ -577,8 +581,6 @@ bool Executable::run(bool x){
             runnin_runnin = output_redirection(leftCmd, rightCmd); 
             k = i;
           }
-          
-          
           // >> case
           else if (exec.at(i) == ">>") {
             vector<string> leftCmd;
@@ -599,45 +601,48 @@ bool Executable::run(bool x){
             runnin_runnin = append_redirection(leftCmd, rightCmd); 
             k = i;
           }
-          else if (exec.at(i) == "|") {
-            vector<string> leftCmd;
-            vector<string> rightCmd;
-
-            int j = i - 1;
-            
-            if(firstLHS){
-            while (j > -1 && !is_Symbol1(exec.at(j) ) ) {
-              leftCmd.insert(leftCmd.begin(), exec.at(j) );
-              j--;
-            }
-
-            j = i + 1;
-            while (j < exec.size() && !is_Symbol1(exec.at(j) ) ) {
-              rightCmd.push_back(exec.at(j) );
-              j++;
-              firstLHS = false;
-            }
-            }
-            
-            else{
-            while (j > k) {
-              leftCmd.insert(leftCmd.begin(), exec.at(j) );
-              j--;
-            }
-
-            j = i + 1;
-            while (j < exec.size() && !is_Symbol1(exec.at(j) ) ) {
-              rightCmd.push_back(exec.at(j) );
-              j++;
-            }
-            }
-            
-            runnin_runnin = pipe(leftCmd, rightCmd); 
-            k = i;
-          }
+        
+        }
       }
+      
+      else if(num_pipes == 1){
+        for (int i = 0; i < exec.size(); i++ ) {
+          if (exec.at(i) == "<") {
+              leftCmd.push_back(exec.at(0) );
+              j = i + 1;
+              while (j < exec.size() && !is_Symbol(exec.at(j) ) ) {
+                leftCmd.push_back(exec.at(j) );
+                j++;
+              }
+          }
+          /*else if (exec.at(i) == ">") {
+              leftCmd.push_back(exec.at(0) );
+              j = i + 1;
+              while (j < exec.size() && !is_Symbol(exec.at(j) ) ) {
+                leftCmd.push_back(exec.at(j) );
+                j++;
+              }
+          }*/
+          if (exec.at(i) == "|") {
+              vector<string> rightCmd;
+              
+              if(leftCmd.size() == 0){
+                leftCmd.push_back(exec.at(0));
+              }
 
+              j = i + 1;
+              while (j < exec.size() && !is_Symbol1(exec.at(j) ) ) {
+                rightCmd.push_back(exec.at(j) );
+                j++;
+              }
+              runnin_runnin = pipe(leftCmd, rightCmd);
+              break;
+            } 
+        }
+      }
+    return runnin_runnin;    
   }
+  
 
   else {
 
