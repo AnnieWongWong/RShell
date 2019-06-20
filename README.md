@@ -94,4 +94,5 @@ The Command class is the composite object that will hold the primitive classes a
 * [Write bool get_Runned](https://github.com/cs100/spring-2019-assignment-stretchy_ice_cream/issues/22)
 
 
-
+# License 
+This program is classified under a GNU Affero General Public License v3.0
